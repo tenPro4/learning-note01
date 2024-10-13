@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  simpleapi:
+    image: ${DOCKER_REGISTRY-}simpleapi
+    ports:
+        - 8033:80
+    build:
+      context: .
+      dockerfile: SimpleAPI/Dockerfile
+    networks:
+        - mydockerTestNetwork
+    depends_on:
+        - SqlServerDb
+
+  SqlServerDb:
+    container_name: SqlServerContainer
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    volumes:
+        - ./db/data:/var/opt/mssql/data
+        - ./db/log:/var/opt/mssql/log
+        - ./db/secrets:/var/opt/mssql/secrets
+    ports:
+        - 8082:1433
+    networks:
+        - mydockerTestNetwork
+    environment:
+        - ACCEPT_EULA=Y
+        - MSSQL_SA_PASSWORD=mytest123#@!
+
+networks:
+  mydockerTestNetwork:
