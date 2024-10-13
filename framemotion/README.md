@@ -1,3 +1,4 @@
+- [项目链接](#项目链接)
 - [Dynamic Navbar Icon](#dynamic-navbar-icon)
 - [StaggerChilder：Child叠加效果](#staggerchilderchild叠加效果)
 - [Page Transition 1](#page-transition-1)
@@ -17,6 +18,9 @@
 - [Viewport](#viewport)
 - [Typing Animation](#typing-animation)
 
+
+# 项目链接
+[链接该笔记使用的项目]([assets/staggerchild_1.gif](https://github.com/tenPro4/framer-motion-practice))
 
 # Dynamic Navbar Icon
 
