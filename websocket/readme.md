@@ -339,6 +339,8 @@ useEffect(() => {
 [Reference 2](https://code-maze.com/aspnetcore-call-signalr-from-controller/)
 [Github](https://github.com/tenPro4/signalR2022/tree/main)
 
+![signalr](assets/signalr.png)
+
 There few important points need to note when working with signalR:
 
 **1. Setup**
