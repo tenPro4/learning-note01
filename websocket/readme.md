@@ -104,12 +104,12 @@ function handleMessage(message) {
 
 > **Multiple Web Socket Events Available**
 > on(event: "close", listener: (this: WebSocket, code: number, reason: Buffer) => void):this;
-    on(event: "error", listener: (this: WebSocket, err: Error) => void): this;
-    on(event: "upgrade", listener: (this: WebSocket, request: IncomingMessage) => void): this;
-    on(event: "message", listener: (this: WebSocket, data: WebSocket.RawData, isBinary: boolean) => void): this;
-    on(event: "open", listener: (this: WebSocket) => void): this;
-    on(event: "ping" | "pong", listener: (this: WebSocket, data: Buffer) => void): this;
-    on(event: string | symbol, listener: (this: WebSocket, ...args: any[]) => void): this;
+> on(event: "error", listener: (this: WebSocket, err: Error) => void): this;
+> on(event: "upgrade", listener: (this: WebSocket, request: IncomingMessage) => void): this;
+> on(event: "message", listener: (this: WebSocket, data: WebSocket.RawData, isBinary: boolean) => void): this;
+> on(event: "open", listener: (this: WebSocket) => void): this;
+> on(event: "ping" | "pong", listener: (this: WebSocket, data: Buffer) => void): this;
+> on(event: string | symbol, listener: (this: WebSocket, ...args: any[]) => void): this;
 
 3. Client send message, server receive data.
 
