@@ -1,7 +1,7 @@
 # AD
 
 ## Check OS And Login With AD
-```dotnet
+```csharp
  bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
  if (isWindows)
  {
@@ -13,7 +13,7 @@
 ```
 
 ## Get AD user Info
-```dotnet
+```csharp
 string pathLDAP = configuration["LDAP_Path"].ToString();
 string directoryEntryUsername = configuration["LDAP_Username"].ToString();
 string directoryEntryPassword = configuration["LDAP_Password"].ToString();
@@ -50,7 +50,7 @@ Minio 是一个开源的对象存储服务器，它与亚马逊 S3 兼容。它�
 2. AspNetCore.Proxy
 
 ## 实践
-```dotnet
+```csharp
 builder.Services.AddProxies();
 
 builder.Services.AddMinio(configureClient => configureClient
@@ -92,7 +92,7 @@ app.UseProxies(proxies =>
     - 用于可视化管理 Quartz 调度器和任务。它提供了一个易于使用的 Web 界面.
 
 ### Setup
-```dotnet
+```csharp
  builder.Services.AddQuartz(q =>
  {
      q.AddJob<JOB1>(new JobKey("job1"), opts => opts
@@ -122,7 +122,7 @@ app.UseProxies(proxies =>
 ```
 
 **Job Class**
-```dotnet
+```csharp
 public class JOB1 : IJob
 {
      public JOB1(){}
@@ -141,7 +141,7 @@ public class JOB1 : IJob
 3. Hangfire.SqlServer
 
 ### Setup
-```dotnet
+```csharp
 builder.Services.AddHangfire(options =>
 {
     options
@@ -314,7 +314,7 @@ downtimeFetcher和iccsFetcher函数会在页面加载的时候呼叫，然后将
 
 # SMTPClient: Mail Services
 ## Setup
-```dotnet
+```csharp
 using System.Net.Mail;
 builder.Services.AddScoped(_ => new SmtpClient(configuration["MailHost"])
 {
@@ -349,7 +349,7 @@ builder.Services.AddScoped(_ => new SmtpClient(configuration["MailHost"])
     </tbody>
 </table>
 ```
-```dotnet
+```csharp
 MailMessage mail = new MailMessage();
 //get template
 StreamReader reader = new StreamReader(Path.Combine(AppContext.BaseDirectory, "Templates/AOIReport_body.html"));
@@ -376,7 +376,7 @@ smtpClient.Send(mail);
 ## Case 2: Add Attachment
 **Desc**: Generate an excel report and attach it to email
 **ExcelService**
-```dotnet
+```csharp
 using OfficeOpenXml;
 using OfficeOpenXml.Table;
 using System.ComponentModel.DataAnnotations;
@@ -472,7 +472,7 @@ public class ExcelService
     }
 }
 ```
-```dotnet
+```csharp
 MailMessage mail = new MailMessage();
 StreamReader reader = new StreamReader(Path.Combine(AppContext.BaseDirectory, "Templates/AOIReport_body.html"));
 string content = reader.ReadToEnd()
@@ -518,7 +518,7 @@ smtpClient.Send(mail);
     <img src="cid:capture" />
 </div>
 ```
-```dotnet
+```csharp
 MailMessage mail = new MailMessage();
 
 StreamReader reader = new StreamReader(Path.Combine(AppContext.BaseDirectory, "Templates/AutoEmailReportServer.html"));
@@ -564,7 +564,7 @@ smtpClient.Send(mail);
 
 ## Example
 截取指定网页的屏幕截图
-```dotnet
+```csharp
 
 private async Task<byte[]> CaptureScreenshot(string server_name)
 {
