@@ -145,22 +145,7 @@ parent部分（listVariants）的初始状态是`closed`，其**x位置是**100v
 
 其中`transition`的配置表明，它会比它的child elements前行动，因此可以从动态图看出，它会先显示夜幕，然后依次显示child 列表。
 
-此外，`transition`配置中的`staggerChildren`会自动给其所有的child elements配置一个**移动时长**，不过也可以在listItemVariants配置`duration`选项实现同一种效果:
-```tsx
-const listItemVariants = {
-  closed: {
-    x: -10,
-    opacity: 0,
-  },
-  opened: {
-    x: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.2,
-    },
-  },
-};
-```
+此外，`transition`配置中的`staggerChildren`会自动给其所有的child elements配置一个**叠加的移动时长**，例如第一个element 0.2秒，第二个0.4秒（0.2*2),第三个0.6秒(0.2*3)....以此类推。
 
 # Page Transition 1
 
