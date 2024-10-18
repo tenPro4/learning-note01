@@ -195,7 +195,7 @@ recurringJobManager.AddOrUpdate<DowntimeReport>("DOWNTIME_REPORT_NIGHT_TEST", a 
 - 如果你的任务调度需求比较复杂，并且需要高度的灵活性和可定制性，那么可以选择 Quartz。
 
 # Emitter Process
-![emitter](../assets/emitter.png)
+![emitter](assets/emitter.png)
 **DowntimeEmitter.cshtml**
 ```cshtml
 <script>
