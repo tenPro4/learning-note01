@@ -1,7 +1,7 @@
 {
     "github.copilot.chat.commitMessageGeneration.instructions": [
         {
-            "text": "Be extremely detailed with the change with bullet points."
+            "text": "Be extremely detailed with the change with bullet points and summary the change with a title."
         }
     ]
 }
