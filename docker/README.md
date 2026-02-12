@@ -20,6 +20,12 @@
 - [解决生产环境的Downtime问题](#解决生产环境的downtime问题)
   - [实施docker swarm](#实施docker-swarm)
     - [实验步骤](#实验步骤)
+- [2025 年的补充](#2025-年的补充)
+  - [Docker](#docker)
+  - [Docker Compose](#docker-compose-1)
+  - [Debug docker service in Visual Studio](#debug-docker-service-in-visual-studio)
+  - [Multi networks](#multi-networks)
+  - [Recommend Docker Image](#recommend-docker-image)
 
 
 ## References
@@ -728,3 +734,168 @@ shutdown状态的线程处于更新状态，当完成更新将会变成运行状
 而running状态的线程要么已完成更新，要么等待下一批的更新处理而转入shutdown状态
 >**注意**
 >使用这种办法只能尽可能减少downtime的发生，而并不是完全杜绝downtime
+
+## 2025 年的补充
+
+### Docker
+
+```bash
+docker tag product-service:1.0 bic224/product-service:v1.0
+
+docker push bic224/product-service:v1.0
+
+docker network create shared-network
+
+docker network ls
+
+docker network inspect shared-network
+
+docker run -e MYSQL_ROOT_PASSWORD=admin --hostname=mysql-host-microservice --network=shared-network mysql
+
+docker run --network=shared-network bic224/product-service:v1.0
+```
+**Notes**: --network or anything must put before image name otherwise it wont work
+
+**When update something**
+-> update the local docker image first
+```bash
+docker build -t product-service:2.0 -f ./ProductsMicroService.API/Dockerfile .
+```
+
+-> tag remote docker
+```bash
+docker tag product-service:2.0 bic224/product-service:v2.0
+```
+
+-> push remote docker
+```bash
+docker push bic224/product-service:v2.0
+```
+
+**Running application and database container instances**
+```bash
+docker run -p 8011:8080 -p 8012:8081 --network=shared-network -e MYSQL_HOST=mysql-host-microservice -e MYSQL_PASSWORD=admin bic224/product-service:v1.0
+
+docker run -e MYSQL_ROOT_PASSWORD=admin --hostname=mysql-host-microservice --network=shared-network mysql
+```
+
+**Set initialize data set to mysql**
+```bash
+docker run -e MYSQL_ROOT_PASSWORD=admin --hostname=mysql-host-microservice --network=shared-network -v "C:/Users/wengshang.hoo/Desktop/work/mysql-init:/docker-entrypoint-initdb.d" mysql
+```
+**Notes**: for window, need put absolute path for volumn
+
+### Docker Compose
+
+**Validate yaml**
+```bash
+docker-compose -f docker-compose.yaml config
+```
+
+**Debugging command**
+```bash
+docker exec -it container_name mysql -u root -p datatabase_name
+docker exec -it container_name psql -U postgres -d datatabase_name
+
+docker inspect container_name
+docker logs container_name
+```
+
+**Read env values from .env**
+By default, `docker-compose.yml` will read the `.env` file under the same directory.
+
+### Debug docker service in Visual Studio
+1. Right click your project -> Add -> Container Orchestrator Support
+	-> This will create docker-compose.yaml and add launceSetting.json
+
+2. Select the "Docker" Launch Profile
+    -> In the top toolbar, click the dropdown next to the Start (Play) button. Instead of "IIS Express" or your project name, select Docker.
+
+3. Update swagger config(if you using swagger)
+```csharp
+//Swagger
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    // Force Swagger UI to use the same port you mapped (7000)
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Products API V1");
+    c.RoutePrefix = string.Empty; // optional: serve swagger at http://localhost:7000/
+});
+```
+
+4. Use the "Containers" Window
+This is the most important tool for debugging the environment itself.
+Go to **View > Other Windows > Containers**.
+
+5. Use `$` to replace you appsetting value if the value read from docker compose environment value. Example:
+```yml
+services:
+  productsmicroservice.api:
+    image: productsmicroserviceapi
+    build:
+      context: .
+      dockerfile: ProductsMicroService.API/Dockerfile
+    environment:
+    - ASPNETCORE_ENVIRONMENT=Development
+    - MYSQL_HOST=db
+    - MYSQL_PASSWORD=admin
+    depends_on:
+    - db
+
+  db:
+    image: mysql:8.4.6
+    environment:
+        MYSQL_ROOT_PASSWORD: admin
+    ports:
+    - "3306:3306"
+    volumes:
+    - "C:/Users/wengshang.hoo/Desktop/work/mysql-init:/docker-entrypoint-initdb.d"
+    networks:
+    - shared-network
+
+networks:
+    shared-network:
+```
+
+You appsetting.json
+```json
+"ConnectionStrings":
+{
+    // Use $MYSQL_HOST
+  "DefaultConnection": "Server=$MYSQL_HOST; Port=3306; Database=ecommerceproductsdatabase; User ID=root; Password=$MYSQL_PASSWORD"
+}
+```
+
+### Multi networks
+
+One container can have multi networks
+
+```yml
+ordersmicroservice.api:
+    networks:
+     - orders-mongodb-network # same network to db, so only ordersmicroservice.api can access db
+     - ecommerce-network
+
+  mongodb-container:
+   image: mongo:latest
+   networks:
+    - orders-mongodb-network # every db have unique network
+
+users-microservice:
+   networks:
+    - users-postgres-network # allow connect to db with same network
+    - ecommerce-network # purpose: allow comminication with ordersmicroservice.api
+   depends_on:
+    - postgres-container
+
+postgres-container:
+   image: postgres:13
+   networks:
+    - users-postgres-network
+```
+
+
+### Recommend Docker Image
+- monitoror/monitoror
+- openproject/openproject
+- tiredofit/osticket
