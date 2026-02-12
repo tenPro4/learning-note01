@@ -360,7 +360,7 @@ stages:
 
 可搭配使用 `variables`来重写环境变量，例如说数据库的地址
 
-细节可参考我个人测试使用的[pipeline](utl).
+细节可参考我个人测试使用的[项目](https://github.com/tenPro4/azure-practice-2025).
 
 有些步骤可能需要配置一些东西才能使用。例如自动化打包，你需要先创建一个 `artifacts feed`，然后在权限设置上允许你的代理执行自动化添加的能力。
 
