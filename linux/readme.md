@@ -104,6 +104,38 @@
     - [📚netstat命令](#netstat命令)
   - [定时常用命令](#定时常用命令)
     - [📚crontab命令](#crontab命令)
+  - [软件包管理](#软件包管理)
+    - [📚rpm命令](#rpm命令)
+    - [📚yum命令](#yum命令)
+  - [🌐 SHELL编程](#-shell编程)
+    - [编写shell脚本](#编写shell脚本)
+    - [脚本的常用执行方式](#脚本的常用执行方式)
+    - [变量](#变量)
+    - [Shell 注释](#shell-注释)
+    - [shell字符串](#shell字符串)
+    - [传递参数](#传递参数)
+    - [Shell 数组](#shell-数组)
+    - [运算符](#运算符)
+    - [echo命令](#echo命令-1)
+    - [read 命令](#read-命令)
+    - [printf 命令](#printf-命令)
+    - [test 命令](#test-命令)
+    - [IF判断](#if判断)
+    - [for 循环](#for-循环)
+    - [until 循环](#until-循环)
+    - [case 语句](#case-语句)
+    - [break 和 continue](#break-和-continue)
+    - [函数](#函数)
+      - [basename](#basename)
+      - [dirname](#dirname)
+      - [自定义函数](#自定义函数)
+    - [输入/输出重定向](#输入输出重定向)
+    - [简单正则使用](#简单正则使用)
+    - [文本处理](#文本处理)
+      - [cut 命令](#cut-命令)
+      - [文件包含](#文件包含)
+      - [sed 命令](#sed-命令)
+      - [awk命令](#awk命令)
 
 
 # 🧾目录结构
@@ -1832,3 +1864,1459 @@ crontab -e -u user1
 # 查看当前用户的已有计划任务列表
 crontab -l
 ```
+
+## 软件包管理
+
+### 📚rpm命令
+
+📔RPM软件包管理器。
+
+🔖rpm命令来自于英文词组”RedHat Package Manager“的缩写，中文译为红帽软件包管理器，其功能是用于在Linux系统下对软件包进行安装、卸载、查询、验证、升级等工作。
+
+<table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td>-a</td><td>查询所有的软件包</td></tr><tr><td>-e</td><td>卸载软件包</td></tr><tr><td>-f</td><td>查询文件或命令属于哪个软件包</td></tr><tr><td>-i</td><td>安装软件包</td></tr><tr><td>-l</td><td>显示软件包的文件列表</td></tr><tr><td>-p</td><td>查询指定的rpm软件包</td></tr><tr><td>-q</td><td>查询软件包</td></tr><tr><td>-h</td><td>安装软件包时列出标记</td></tr><tr><td>-R</td><td>显示软件包的依赖关系</td></tr><tr><td>-s</td><td>显示文件状态，本参数需配合”-l”参数使用</td></tr><tr><td>-U</td><td>升级软件包</td></tr><tr><td>-v</td><td>显示命令执行过程</td></tr><tr><td>-vv</td><td>详细显示指令执行过程</td></tr></tbody></table>
+
+📃参考实例
+
+```bash
+# 正常安装软件包
+rpm -ivh cockpit-185-2.el8.x86_64.rpm 
+
+# 显示系统已安装过的全部RPM软件包
+rpm -qa
+
+# 查询某个软件的安装路径
+rpm -ql cockpit
+
+# 卸载某个通过RPM软件包安装的服务
+rpm -evh cockpit
+
+# 升级某个软件包
+rpm  -Uvh cockpit-185-2.el8.x86_64.rpm 
+```
+
+### 📚yum命令
+📔基于RPM的软件包管理器。
+
+🔖yum命令来自于英文词组”YellowdogUpdater,Modified“的缩写，其功能是用于在Linux系统中基于RPM技术进行软件包的管理工作。yum技术通用于RHEL、CentOS、Fedora、OpenSUSE等主流系统，可以让系统管理人员交互式的自动化更新和管理软件包，实现从指定服务器自动下载、更新、删除软件包的工作。
+
+🔖yum软件仓库及命令能够自动处理软件依赖关系，一次性安装所需全部软件，无需繁琐的操作。
+
+<table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td>-h</td><td>显示帮助信息</td></tr><tr><td>-y</td><td>对所有的提问都回答“yes”</td></tr><tr><td>-c</td><td>指定配置文件</td></tr><tr><td>-q</td><td>安静模式</td></tr><tr><td>-v</td><td>详细模式</td></tr><tr><td>-t</td><td>检查外部错误</td></tr><tr><td>-d</td><td>设置调试等级（0-10）</td></tr><tr><td>-e</td><td>设置错误等级（0-10）</td></tr><tr><td>-R</td><td>设置yum处理一个命令的最大等待时间</td></tr><tr><td>-C</td><td>完全从缓存中运行，而不去下载或者更新任何头文件</td></tr><tr><td>install</td><td>安装rpm软件包</td></tr><tr><td>update</td><td>更新rpm软件包</td></tr><tr><td>check-update</td><td>检查是否有可用的更新rpm软件包</td></tr><tr><td>remove</td><td>删除指定的rpm软件包</td></tr><tr><td>list</td><td>显示软件包的信息</td></tr><tr><td>search</td><td>检查软件包的信息</td></tr><tr><td>info</td><td>显示指定的rpm软件包的描述信息和概要信息</td></tr><tr><td>clean</td><td>清理yum过期的缓存</td></tr><tr><td>shell</td><td>进入yum的shell提示符</td></tr><tr><td>resolvedep</td><td>显示rpm软件包的依赖关系</td></tr><tr><td>localinstall</td><td>安装本地的rpm软件包</td></tr><tr><td>localupdate</td><td>显示本地rpm软件包进行更新</td></tr><tr><td>deplist</td><td>显示rpm软件包的所有依赖关系</td></tr></tbody></table>
+
+📃参考实例
+```bash
+# 清理原有的软件仓库信息缓存
+yum clean all
+
+# 建立最新的软件仓库信息缓存
+yum makecache
+
+# 安装指定的服务及相关软件包
+yum install httpd
+
+# 更新指定的服务及相关软件包
+yum update httpd
+
+# 卸载指定的服务及相关软件包
+yum remove httpd
+
+# 显示可安装的软件包组列表
+yum grouplist
+
+# 显示指定服务的软件信息
+yum info httpd
+```
+
+## 🌐 SHELL编程
+
+**概述**
+
+🖋 Shell 是一个用 C 语言编写的程序，它是用户使用 Linux 的桥梁。Shell 既是一种命令语言，又是一种程序设计语言。
+
+🖊 Shell 是指一种应用程序，这个应用程序提供了一个界面，用户通过这个界面访问操作系统内核的服务。
+
+🖌 Shell 脚本（shell script），是一种为 shell 编写的脚本程序。
+
+🖍 Shell 编程跟 JavaScript、php 编程一样，只要有一个能编写代码的文本编辑器和一个能解释执行的脚本解释器就可以了。
+
+**📃 Linux 的 Shell 种类众多，常见的有：**
+- Bourne Shell（/usr/bin/sh或/bin/sh）
+- Bourne Again Shell（/bin/bash）
+- C Shell（/usr/bin/csh）
+- K Shell（/usr/bin/ksh）
+- Shell for Root（/sbin/sh）
+- ...
+
+**📃 sh/bash/csh/Tcsh/ksh/pdksh等shell的区别：**
+
+👉 sh(全称 Bourne Shell)： 是UNIX最初使用的 shell，而且在每种 UNIX 上都可以使用。
+
+👉 Bourne Shell： 在 shell 编程方面相当优秀，但在处理与用户的交互方面做得不如其他几种 shell。
+
+👉 bash(全称 Bourne Again Shell)： LinuxOS 默认的，它是 Bourne Shell 的扩展。 与 Bourne Shell 完全兼容，并且在 Bourne Shell 的基础上增加了很多特性。可以提供命令补全，命令编辑和命令历史等功能。它还包含了很多 C Shell 和 Korn Shell 中的优点，有灵活和强大的编辑接口，同时又很友好的用户界面。
+
+👉 csh(全称 C Shell)： 是一种比 Bourne Shell更适合的变种 Shell，它的语法与 C 语言很相似。
+
+👉 Tcsh： 是 Linux 提供的 C Shell 的一个扩展版本。Tcsh 包括命令行编辑，可编程单词补全，拼写校正，历史命令替换，作业控制和类似 C 语言的语法，他不仅和 Bash Shell 提示符兼容，而且还提供比 Bash Shell 更多的提示符参数。
+
+👉 ksh(全称 Korn Shell)： 集合了 C Shell 和 Bourne Shell 的优点并且和 Bourne Shell 完全兼容。
+
+👉 pdksh： 是 Linux 系统提供的 ksh 的扩展。pdksh 支持人物控制，可以在命令行上挂起，后台执行，唤醒或终止程序。
+
+**📃 Linux 提供的 Shell 解析器有**
+
+```bash
+[root@Demo~] $ cat /etc/shells
+/bin/sh
+/bin/bash
+/usr/bin/sh
+/usr/bin/bash
+/bin/tcsh
+/bin/csh
+```
+
+📃 Centos 默认的解析器是 bash
+
+### 编写shell脚本
+
+脚本以 `#!/bin/bash`  开头（指定解析器）
+
+`#!` 告诉系统其后路径所指定的程序即是解释此脚本文件的 Shell 程序。
+
+打开文本编辑器(可以使用 vi/vim 命令来创建文件)，新建一个文件 helloworld.sh，扩展名为 sh（sh代表shell），扩展名并不影响脚本执行。
+
+```bash
+touch helloworld.sh
+vim helloworld.sh
+
+//  在 helloworld.sh 中输入如下内容
+
+#!/bin/bash
+echo "helloworld"
+```
+
+`#!` 是一个约定的标记，它告诉系统这个脚本需要什么解释器来执行，即使用哪一种 Shell。
+
+`echo`  命令用于向窗口输出文本。
+
+### 脚本的常用执行方式
+
+**📝 采用 bash 或 sh+脚本的相对路径或绝对路径（不用赋予脚本+x 权限）**
+
+📃 sh+脚本的相对路径
+
+```bash
+[root@demo shells]$ sh ./helloworld.sh
+helloworld
+```
+
+📃 sh+脚本的绝对路径
+```bash
+[root@demo shells]$ sh /home/shells/helloworld.sh
+helloworld
+```
+
+📃 bash+脚本的相对路径
+```bash
+[root@demo shells]$ sh ./helloworld.sh
+helloworld
+```
+
+🖇 这种执行方法，本质是 bash 解析器帮你执行脚本，所以脚本本身不需要执权限。
+
+**📝 采用输入脚本的绝对路径或相对路径执行脚本（必须具有可执行权限+x）**
+
+📃 首先要赋予 helloworld.sh 脚本的+x 权限
+
+```bash
+[root@demo shells]$ chmod +x helloworld.sh
+```
+
+📃 相对路径
+```bash
+[root@demo shells]$ ./helloworld.sh
+
+# or
+
+/home/shells/helloworld.sh
+```
+
+**📝 在脚本的路径前加上 “.” 或者 source**
+
+📃 编写以下脚本
+
+```bash
+[root@demo shells]$ cat test.sh
+#!/bin/bash
+A=5
+echo $A
+```
+
+📃 分别用 sh，bash，./ 和 . 的方式来执行
+```bash
+[root@demo shells]$ bash test.sh
+5
+
+[root@demo shells]$ sh test.sh
+5
+
+[root@demo shells]$ ./test.sh
+5
+
+[root@demo shells]$ . test.sh
+5
+```
+
+🔗 前两种方式都是在当前 shell 中打开一个子 shell 来执行脚本内容，当脚本内容结束，则子 shell 关闭，回到父 shell 中。
+
+🔗 第三种，也就是使用在脚本路径前加“.”或者 source 的方式，可以使脚本内容在当前shell 里执行，而无需打开子 shell！这也是为什么我们每次要修改完/etc/profile 文件以后，需要 source 一下的原因。
+
+🔗 开子 shell 与不开子 shell 的区别就在于，环境变量的继承关系，如在子 shell 中设置的当前变量，父 shell 是不可见的。
+
+### 变量
+
+**常用系统变量**
+`$HOME`, `$PWD` , `$SHELL`, `$USER` 等。
+
+📃 查看系统变量的值
+```bash
+echo $HOME
+```
+
+📃 显示当前 Shell 中所有变量
+```BASH
+[root@demo shells]$ set
+```
+
+📍 定义变量时，变量名不加美元符号
+
+📍 变量名和等号之间不能有空格
+
+**📍 变量名的命名须遵循规则：**
+👉 命名只能使用英文字母，数字和下划线，首个字符不能以数字开头。
+
+👉 中间不能有空格，可以使用下划线 _。
+
+👉 不能使用标点符号。
+
+👉 不能使用bash里的关键字（可用help命令查看保留关键字）。
+
+📍 使用一个定义过的变量，只要在变量名前面加美元符号即可。
+
+📍 变量名外面的花括号是可选的，加不加都行，加花括号是为了帮助解释器识别变量的边界 (推荐给所有变量加上花括号)。
+
+📍 已定义的变量，可以被重新定义。
+
+**变量类型：运行shell时，会同时存在三种变量：**
+
+👉 局部变量： 局部变量在脚本或命令中定义，仅在当前shell实例中有效，其他shell启动的程序不能访问局部变量。
+
+👉 环境变量： 所有的程序，包括shell启动的程序，都能访问环境变量，有些程序需要环境变量来保证其正常运行。必要的时候shell脚本也可以定义环境变量。
+
+👉 shell变量： shell变量是由shell程序设置的特殊变量。shell变量中有一部分是环境变量，有一部分是局部变量，这些变量保证了shell的正常运行。
+
+📍 只读变量：使用 `readonly` 命令可以将变量定义为只读变量，只读变量的值不能被改变。
+
+📍 删除变量：使用 `unset` 命令可以删除变量。变量被删除后不能再次使用。unset 命令不能删除只读变量。
+
+📃 参考实例
+
+```bash
+[root@demo shells]$ A=5
+[root@demo shells]$ echo $A
+5
+
+[root@demo shells]$ A=8
+[root@demo shells]$ echo $A
+8
+
+# 撤销变量 A
+[root@demo shells]$ unset A
+[root@demo shells]$ echo $A
+
+# 声明静态的变量 B=2，不能 unset
+[root@demo shells]$ readonly B=2
+[root@demo shells]$ echo $B
+2
+
+[root@demo shells]$ B=9
+-bash B: readonly variable
+
+# 在 bash 中，变量默认类型都是字符串类型，无法直接进行数值运算
+[root@demo shells]$ C=1+2
+[root@demo shells]$ echo $C
+1+2
+
+# 变量的值如果有空格，需要使用双引号或单引号括起来
+[root@demo shells]$ D=I love you
+-bash: world: command not found
+[root@demo shells]$ D="I love you"
+[root@demo shells]$ echo $D
+I love you
+
+[root@demo shells]$ vim helloworld.sh
+
+#!/bin/bash
+echo "helloworld"
+echo $B
+
+[root@demo shells]$ ./helloworld.sh
+helloworld
+# 发现并没有打印输出变量 B 的值
+# 使用 export 变量名
+
+[root@demo shells]$ export B
+[root@demo shells]$ ./helloworld.sh
+helloworld
+2
+```
+
+### Shell 注释
+以 # 开头的行就是注释，会被解释器忽略，通过每一行加一个 # 号设置多行注释。
+
+```bash
+# 这是一个注释
+
+##### 开始 #####
+#
+#
+# 这里可以添加描述信息
+#
+#
+##### 结束  #####
+```
+
+多行注释还可以使用以下格式
+
+```bash
+:<<EOF
+注释内容...
+注释内容...
+注释内容...
+EOF
+```
+
+EOF 也可以使用其他符号
+```bash
+:<<'
+注释内容...
+注释内容...
+注释内容...
+'
+
+:<<!
+注释内容...
+注释内容...
+注释内容...
+!
+```
+
+### shell字符串
+
+字符串是shell编程中最常用最有用的数据类型，字符串可以用单引号，也可以用双引号，也可以不用引号。
+
+**单引号：**
+👉 单引号里的任何字符都会原样输出，单引号字符串中的变量是无效的；
+👉 单引号字串中不能出现单独一个的单引号（对单引号使用转义符后也不行），但可成对出现，作为字符串拼接使用。
+
+**双引号**
+👉 双引号里可以有变量。
+👉 双引号里可以出现转义字符。
+
+📃 拼接字符串
+
+```bash
+your_name="runoob"
+
+# 使用双引号拼接,输出结果为：hello, runoob ! hello, runoob !
+greeting="hello, " $your_name " !"
+greeting1="hello $your_name !"
+echo $greeting $greeting1
+```
+
+```bash
+# 使用单引号拼接,输出结果为：hello, runoob ! hello, ${your_name} !
+greeting_2='hello, ' $your_name '!'
+greeting_3='hello, ${your_name} !'
+echo $greeting_2 $greeting_3
+```
+
+📃 获取字符串长度
+```bash
+string="abcd"
+echo ${#string}   # 输出 4
+
+# 变量为数组时，${#string} 等价于 ${#string[0]}:
+
+echo ${#string[0]}    # 输出 4
+
+# 计算字符长度也可是使用 length。
+
+string="hello,everyone myname is mingming" # string字符串里边有空格,所以需要添加双引号
+
+expr length "$string"   # 输出:34
+
+# 使用 expr 命令时，表达式中的运算符左右必须包含空格，如果不包含空格，将会输出表达式本身
+
+expr 5+6    # 直接输出 5+6
+expr 5 + 6    # 输出 11
+
+# 对于某些运算符，还需要我们使用符号"\"进行转义，否则就会提示语法错误
+expr 5 * 6    # 输出错误
+expr 5 \* 6   # 输出30
+```
+
+📃 提取子字符串
+```bash
+string="runoob is a great site"
+echo ${string:1:4}  # 输出 unoo
+```
+
+📃 查找子字符串
+```bash
+# 查找字符 i 或 o 的位置(哪个字母先出现就计算哪个)
+string="runoob is a great site"
+echo `expr index "$string" io`  # 输出 4
+```
+
+📃 字符串截取
+
+0️⃣ 定义字符串
+```bash
+var=http://www.aaa.com/123.htm
+```
+
+1️⃣ `#` 号截取，删除左边字符，保留右边字符
+```bash
+echo ${var#*//}   # 结果是 ：www.aaa.com/123.htm
+```
+
+`#`  其中 var 是变量名，# 号是运算符，*// 表示从左边开始删除第一个 // 号及左边的所有字符，即删除 http://
+
+2️⃣## 号截取，删除左边字符，保留右边字符
+```bash
+echo ${var##*/}   # 结果是 123.htm
+```
+`##*/` 表示从左边开始删除最后（最右边）一个 / 号及左边的所有字符，即删除 http://www.aaa.com/
+
+3️⃣ %号截取，删除右边字符，保留左边字符
+```bash
+echo ${var%/*}  # 结果是：http://www.aaa.com
+```
+
+`%/* ` 表示从右边开始，删除第一个 / 号及右边的字符
+
+4️⃣ %% 号截取，删除右边字符，保留左边字符
+```bash
+echo ${var%%/*}   # 结果是：http:
+```
+
+5️⃣ 从左边第几个字符开始，及字符的个数
+```bash
+echo ${var:0:5}   # 结果是: http:
+```
+📎 其中的 0 表示左边第一个字符开始，5 表示字符的总个数。
+
+7️⃣ 从右边第几个字符开始，及字符的个数
+```bash
+echo ${var:0-7:3}   # 结果是: 123
+```
+📎 其中的 0-7 表示右边算起第七个字符开始，3 表示字符的个数。
+
+8️⃣ 从右边第几个字符开始，一直到结束。
+```bash
+echo ${var:0-7}   # 结果是: 123.htm
+```
+📎 表示从右边第七个字符开始，一直到结束。
+
+📍 左边的第一个字符是用 0 表示，右边的第一个字符用 0-1 表示。
+
+**# ## % %%:**
+👉 `#`, `##`  表示从左边开始删除。一个 `#` 表示从左边删除到第一个指定的字符；两个 `#`表示从左边删除到最后一个指定的字符。
+👉 `%`,`%%` 表示从右边开始删除。一个 `%`表示从右边删除到第一个指定的字符；两个`%` 表示从右边删除到最后一个指定的字符。
+👉 删除包括了指定的字符本身。
+
+📃 read 命令用于获取键盘输入信息
+
+🔦 它的语法形式一般是：`read [-options] [variable...]
+
+```bash
+# -p 参数由于设置提示信息
+read -p "input a value:" a #获取键盘输入的 a 变量数字
+read -p "input b value:" b #获取键盘输入的 b 变量数字
+r=$[a+b]
+echo "result = ${r}" #输出显示结果 r
+```
+
+### 传递参数
+向脚本传递参数，脚本内获取参数的格式为：
+
+<span class="MathJax" id="MathJax-Element-1-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x3002;&lt;/mo&gt;&lt;/mrow&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x4EE3;&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x8868;&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x4E00;&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x4E2A;&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x6570;&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x5B57;&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#xFF0C;&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x5176;&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x4E2D;&lt;/mo&gt;&lt;/mrow&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-137" style="width: 11.148em; display: inline-block;"><span style="display: inline-block; position: relative; width: 9.273em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.409em, 1009.27em, 2.711em, -999.997em); top: -2.341em; left: 0em;"><span class="mrow" id="MathJax-Span-138"><span class="mi" id="MathJax-Span-139" style="font-family: STIXMathJax_Normal-italic;">𝑛</span><span class="texatom" id="MathJax-Span-140"><span class="mrow" id="MathJax-Span-141"><span class="mo" id="MathJax-Span-142"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">。</span></span></span></span><span class="mi" id="MathJax-Span-143" style="font-family: STIXMathJax_Normal-italic;">𝑛</span><span class="texatom" id="MathJax-Span-144"><span class="mrow" id="MathJax-Span-145"><span class="mo" id="MathJax-Span-146"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">代</span></span></span></span><span class="texatom" id="MathJax-Span-147"><span class="mrow" id="MathJax-Span-148"><span class="mo" id="MathJax-Span-149"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">表</span></span></span></span><span class="texatom" id="MathJax-Span-150"><span class="mrow" id="MathJax-Span-151"><span class="mo" id="MathJax-Span-152"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">一</span></span></span></span><span class="texatom" id="MathJax-Span-153"><span class="mrow" id="MathJax-Span-154"><span class="mo" id="MathJax-Span-155"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">个</span></span></span></span><span class="texatom" id="MathJax-Span-156"><span class="mrow" id="MathJax-Span-157"><span class="mo" id="MathJax-Span-158"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">数</span></span></span></span><span class="texatom" id="MathJax-Span-159"><span class="mrow" id="MathJax-Span-160"><span class="mo" id="MathJax-Span-161"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">字</span></span></span></span><span class="texatom" id="MathJax-Span-162"><span class="mrow" id="MathJax-Span-163"><span class="mo" id="MathJax-Span-164"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">，</span></span></span></span><span class="texatom" id="MathJax-Span-165"><span class="mrow" id="MathJax-Span-166"><span class="mo" id="MathJax-Span-167"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">其</span></span></span></span><span class="texatom" id="MathJax-Span-168"><span class="mrow" id="MathJax-Span-169"><span class="mo" id="MathJax-Span-170"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">中</span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.346em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.309em; border-left: 0px solid; width: 0px; height: 1.316em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi><mrow class="MJX-TeXAtom-ORD"><mo>。</mo></mrow><mi>n</mi><mrow class="MJX-TeXAtom-ORD"><mo>代</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>表</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>一</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>个</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>数</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>字</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>，</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>其</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>中</mo></mrow></math></span></span>
+
+n。n 代表一个数字，其中 0 为执行的文件名（包含文件路径），1 为执行脚本的第一个参数，2 为执行脚本的第二个参数，以此类推……
+
+
+📃 参考实例
+```bash
+echo "Shell 传递参数实例！";
+echo "执行的文件名：$0";
+echo "第一个参数为：$1";
+echo "第二个参数为：$2";
+echo "第三个参数为：$3";
+
+$ chmod +x test.sh
+$ ./test.sh 1 2 3
+Shell 传递参数实例！
+执行的文件名：./test.sh
+第一个参数为：1
+第二个参数为：2
+第三个参数为：3
+```
+
+<table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td>$#</td><td>传递到脚本的参数个数</td></tr><tr><td>$*</td><td>以一个单字符串显示所有向脚本传递的参数。如"<span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-2-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mo&gt;&amp;#x2217;&lt;/mo&gt;&lt;mo&gt;&amp;#x201C;&lt;/mo&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x7528;&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x300C;&lt;/mo&gt;&lt;/mrow&gt;&lt;mo&gt;&amp;#x201D;&lt;/mo&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x300D;&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x62EC;&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x8D77;&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x6765;&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x7684;&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x60C5;&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x51B5;&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x3001;&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x4EE5;&lt;/mo&gt;&lt;/mrow&gt;&lt;mo&gt;&amp;quot;&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-1" style="width: 13.217em; display: inline-block;"><span style="display: inline-block; position: relative; width: 11.015em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.551em, 1010.96em, 2.86em, -999.997em); top: -2.497em; left: 0em;"><span class="mrow" id="MathJax-Span-2"><span class="mo" id="MathJax-Span-3" style="font-family: STIXMathJax_Main;">∗</span><span class="mo" id="MathJax-Span-4" style="font-family: STIXMathJax_Main;">“</span><span class="texatom" id="MathJax-Span-5"><span class="mrow" id="MathJax-Span-6"><span class="mo" id="MathJax-Span-7"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">用</span></span></span></span><span class="texatom" id="MathJax-Span-8"><span class="mrow" id="MathJax-Span-9"><span class="mo" id="MathJax-Span-10"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">「</span></span></span></span><span class="mo" id="MathJax-Span-11" style="font-family: STIXMathJax_Main;">”</span><span class="texatom" id="MathJax-Span-12"><span class="mrow" id="MathJax-Span-13"><span class="mo" id="MathJax-Span-14"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">」</span></span></span></span><span class="texatom" id="MathJax-Span-15"><span class="mrow" id="MathJax-Span-16"><span class="mo" id="MathJax-Span-17"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">括</span></span></span></span><span class="texatom" id="MathJax-Span-18"><span class="mrow" id="MathJax-Span-19"><span class="mo" id="MathJax-Span-20"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">起</span></span></span></span><span class="texatom" id="MathJax-Span-21"><span class="mrow" id="MathJax-Span-22"><span class="mo" id="MathJax-Span-23"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">来</span></span></span></span><span class="texatom" id="MathJax-Span-24"><span class="mrow" id="MathJax-Span-25"><span class="mo" id="MathJax-Span-26"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">的</span></span></span></span><span class="texatom" id="MathJax-Span-27"><span class="mrow" id="MathJax-Span-28"><span class="mo" id="MathJax-Span-29"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">情</span></span></span></span><span class="texatom" id="MathJax-Span-30"><span class="mrow" id="MathJax-Span-31"><span class="mo" id="MathJax-Span-32"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">况</span></span></span></span><span class="texatom" id="MathJax-Span-33"><span class="mrow" id="MathJax-Span-34"><span class="mo" id="MathJax-Span-35"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">、</span></span></span></span><span class="texatom" id="MathJax-Span-36"><span class="mrow" id="MathJax-Span-37"><span class="mo" id="MathJax-Span-38"><span style="font-family: STIXGeneral, &quot;Arial Unicode MS&quot;, serif; font-size: 83%; font-style: normal; font-weight: normal;">以</span></span></span></span><span class="mo" id="MathJax-Span-39" style="font-family: STIXMathJax_Main; padding-left: 0.301em;">"</span></span><span style="display: inline-block; width: 0px; height: 2.503em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.282em; border-left: 0px solid; width: 0px; height: 1.361em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>∗</mo><mo>“</mo><mrow class="MJX-TeXAtom-ORD"><mo>用</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>「</mo></mrow><mo>”</mo><mrow class="MJX-TeXAtom-ORD"><mo>」</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>括</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>起</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>来</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>的</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>情</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>况</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>、</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>以</mo></mrow><mo>"</mo></math></span></span><script type="math/tex" id="MathJax-Element-2">*“用「”」括起来的情况、以"</script>1 <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-3-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo&gt;&amp;#x2026;&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-40" style="width: 2.027em; display: inline-block;"><span style="display: inline-block; position: relative; width: 1.67em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.67em, 1001.55em, 2.682em, -999.997em); top: -2.497em; left: 0em;"><span class="mrow" id="MathJax-Span-41"><span class="mn" id="MathJax-Span-42" style="font-family: STIXMathJax_Main;">2</span><span class="mo" id="MathJax-Span-43" style="font-family: STIXMathJax_Main; padding-left: 0.182em;">…</span></span><span style="display: inline-block; width: 0px; height: 2.503em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.068em; border-left: 0px solid; width: 0px; height: 1.004em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mn>2</mn><mo>…</mo></math></span></span><script type="math/tex" id="MathJax-Element-3">2 … </script>n"的形式输出所有参数。</td></tr><tr><td>$$</td><td>脚本运行的当前进程ID号</td></tr><tr><td>$!</td><td>后台运行的最后一个进程的ID号</td></tr><tr><td>$@</td><td>与<span class="katex--inline"><span class="katex">
+<span class="katex-html"><span class="base"><span class="strut" style="height: 0.6944em;"></span><span class="mord">2"</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">"</span></span></span></span></span>n” 的形式输出所有参数。</td></tr><tr><td>$-</td><td>显示Shell使用的当前选项，与set命令功能相同。</td></tr><tr><td>$?</td><td>显示最后命令的退出状态。0表示没有错误，其他任何值表明有错误。</td></tr></tbody></table>
+
+📃 参考实例
+```bash
+echo "Shell 传递参数实例！";
+echo "执行的文件名：$0";
+echo "第一个参数为：$1";
+echo "参数个数为：$#";
+echo "传递的参数作为一个字符串显示：：$*";
+
+$ chmod +x test.sh
+$ ./test.sh 1 2 3
+Shell 传递参数实例！
+执行的文件名：./test.sh
+第一个参数为：1
+参数个数为：3
+传递的参数作为一个字符串显示：1 2 3
+```
+
+*与@
+👉 都是引用所有参数。
+👉 只有在双引号中体现出来。假设在脚本运行时写了三个参数 1、2、3，，则 " * " 等价于 “1 2 3”（传递了一个参数），而 “@” 等价于 “1” “2” “3”（传递了三个参数）。
+
+```bash
+echo "--\$* 演示 ---"
+for i in "$*"; do
+  echo $i
+done
+
+echo "--\$@ 演示 ---"
+for i in "$@"; do
+  echo $i
+done
+
+$ chmod +x test.sh
+$ ./test.sh 1 2 3
+--$* 演示
+1 2 3
+--$@ 演示
+1
+2
+3
+```
+
+### Shell 数组
+bash支持一维数组（不支持多维数组），并且没有限定数组的大小。
+
+数组元素的下标由 0 开始编号。获取数组中的元素要利用下标，下标可以是整数或算术表达式，其值应大于或等于 0。
+
+在 Shell 中，用括号来表示数组，数组元素用"空格"符号分割开。定义数组的一般形式为： `数组名=(值1 值2 ... 值n)`
+
+📃 例如：
+
+```bash
+array_name=(value0 value1 value2 value3)
+
+# or
+array_name=(
+  value0
+  value1
+  value2
+  value3
+)
+
+# 还可以单独定义数组的各个分量。可以不使用连续的下标，而且下标的范围没有限制。
+array_name[0]=value0
+array_name[1]=value1
+array_name[n]=valuen
+```
+
+读取数组
+
+读取数组元素值的一般格式是：`${数组名[下标]}`
+
+```bash
+valuen=${array_name[n]}
+
+# 使用 @ 符号可以获取数组中的所有元素
+echo ${array_name[@]}
+```
+
+获取数组的长度
+
+ 📃 例如：
+ ```bash
+ # 获取数组长度的方法与获取字符串长度的方法相同
+ # 取得数组元素的个数
+ length=${#array_name[@]}
+ # Or
+ length=${#array_name[*]}
+ # 取得数组单个元素的长度
+ lengthn=${#array_name[n]}
+ ```
+
+ **关联数组**
+Bash 支持关联数组，可以使用任意的字符串、或者整数作为下标来访问数组元素。关联数组使用 declare 命令来声明。 
+
+语法格式：`declare -A array_name`
+- A 选项就是用于声明一个关联数组。
+- 关联数组的键是唯一的。
+
+📃 创建一个关联数组 site，并创建不同的键值
+```bash
+declare -A site=(["A"]="1" ["B"]="2" ["C"]="3")
+```
+
+📃 也可以先声明一个关联数组，然后再设置键和值
+```bash
+declare -A site
+site["A"]="1"
+site["B"]="2"
+```
+
+📃 访问关联数组元素可以使用指定的键
+```bash
+declare -A site
+site["A"]="1"
+site["B"]="2"
+
+echo ${site["B"]}   # 执行脚本，输出结果：2
+```
+
+📃 在数组前加一个感叹号 `!` 可以获取数组的所有键
+```bash
+declare -A site
+site["A"]="1"
+site["B"]="2"
+
+echo "${!site[*]}"    # A B
+echo "${!site[@]}"    # A B
+```
+
+📃 数组的值也可以写入变量
+
+```bash
+A=1
+my_array=($A B C D)
+echo "第一个元素为: ${my_array[0]}" # 1
+echo "第二个元素为: ${my_array[1]}" # b
+echo "第三个元素为: ${my_array[1]}" # c
+```
+
+📃 字符串转数组
+```bash
+words="aaa bbb ccc"
+
+#字符串转数组，空格是分隔符
+array=(${words// / })
+#打印数组最后一个成员
+echo ${array[${#array[*]}-1]} # ccc
+#打印数组长度
+echo ${#array[*]} # 3
+
+#字符串不转换为数组，在循环实现以空格为分隔符打印每个成员
+for word in ${words}; do
+  echo ${word}  # aaabbbccc
+done
+```
+
+📃 字符串替换
+```bash
+# 使用 string/pattern/string 进行首个 pattern 的替换
+string="text, dummy, text, dummy"
+echo ${string/text/TEXT} # TEXT, dummy, text, dummy
+
+# 使用 string//pattern/string 进行全部 pattern 的替换
+string="text, dummy, text, dummy"
+echo ${string//text/TEXT} # TEXT, dummy, TEXT, dummy
+```
+
+### 运算符
+
+原生bash不支持简单的数学运算，但是可以通过其他命令来实现，例如 awk 和 expr，expr 最常用。
+
+`expr` 是一款表达式计算工具，使用它能完成表达式的求值操作。
+
+```bash
+val=`expr 2 + 2`
+echo "两数之和为 : $val"  # 两数之和为 : 4
+```
+
+表达式和运算符之间要有空格，例如 2+2 是不对的，必须写成 2 + 2。
+
+**算术运算符**
+假定变量 a 为 10，变量 b 为 20：
+
+<table><thead><tr><th>运算符</th><th>说明</th><th>举例</th></tr></thead><tbody><tr><td>+</td><td>加法</td><td><code>expr $a + $b</code> 结果为 30</td></tr><tr><td>-</td><td>减法</td><td><code>expr $a - $b</code> 结果为 -10</td></tr><tr><td>*</td><td>乘法</td><td><code>expr $a \* $b</code> 结果为 200</td></tr><tr><td>/</td><td>除法</td><td><code>expr $b / $a</code> 结果为 2</td></tr><tr><td>%</td><td>取余</td><td><code>expr $b % $a</code> 结果为 0</td></tr><tr><td>=</td><td>赋值</td><td>a=$b 把变量 b 的值赋给 a</td></tr><tr><td>==</td><td>相等。用于比较两个数字，相同则返回 true</td><td>[ <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-5-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo&gt;==&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-56" style="width: 2.682em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.205em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.908em, 1002.15em, 2.682em, -999.997em); top: -2.497em; left: 0em;"><span class="mrow" id="MathJax-Span-57"><span class="mi" id="MathJax-Span-58" style="font-family: STIXMathJax_Normal-italic;">𝑎</span><span class="mo" id="MathJax-Span-59" style="font-family: STIXMathJax_Main; padding-left: 0.301em;">=<span style="font-family: STIXMathJax_Main;">=</span></span></span><span style="display: inline-block; width: 0px; height: 2.503em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.068em; border-left: 0px solid; width: 0px; height: 0.718em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>==</mo></math></span></span><script type="math/tex" id="MathJax-Element-5">a == </script>b ] 返回 false</td></tr><tr><td>!=</td><td>不相等。用于比较两个数字，不相同则返回 true</td><td>[ <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-6-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo&gt;!&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-60" style="width: 2.265em; display: inline-block;"><span style="display: inline-block; position: relative; width: 1.848em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.67em, 1001.79em, 2.682em, -999.997em); top: -2.497em; left: 0em;"><span class="mrow" id="MathJax-Span-61"><span class="mi" id="MathJax-Span-62" style="font-family: STIXMathJax_Normal-italic;">𝑎</span><span class="mo" id="MathJax-Span-63" style="font-family: STIXMathJax_Main;">!</span><span class="mo" id="MathJax-Span-64" style="font-family: STIXMathJax_Main; padding-left: 0.301em;">=</span></span><span style="display: inline-block; width: 0px; height: 2.503em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.068em; border-left: 0px solid; width: 0px; height: 1.004em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>!</mo><mo>=</mo></math></span></span><script type="math/tex" id="MathJax-Element-6">a != </script>b ] 返回 true</td></tr></tbody></table>
+
+🔗 条件表达式要放在方括号之间，并且要有空格。[a == b] 是错误的，必须写成 [ a ==b]
+
+**关系运算符**
+假定变量 a 为 10，变量 b 为 20：
+
+<table><thead><tr><th>运算符</th><th>说明</th><th>举例</th></tr></thead><tbody><tr><td>-eq</td><td>检测两个数是否相等，相等返回 true</td><td>[ <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-8-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;q&lt;/mi&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-65" style="width: 3.098em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.562em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.789em, 1002.56em, 2.86em, -999.997em); top: -2.497em; left: 0em;"><span class="mrow" id="MathJax-Span-66"><span class="mi" id="MathJax-Span-67" style="font-family: STIXMathJax_Normal-italic;">𝑎</span><span class="mo" id="MathJax-Span-68" style="font-family: STIXMathJax_Main; padding-left: 0.241em;">−</span><span class="mi" id="MathJax-Span-69" style="font-family: STIXMathJax_Normal-italic; padding-left: 0.241em;">𝑒</span><span class="mi" id="MathJax-Span-70" style="font-family: STIXMathJax_Normal-italic;">𝑞<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span></span><span style="display: inline-block; width: 0px; height: 2.503em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.282em; border-left: 0px solid; width: 0px; height: 1.004em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>−</mo><mi>e</mi><mi>q</mi></math></span></span><script type="math/tex" id="MathJax-Element-8">a -eq </script>b ] 返回 false</td></tr><tr><td>-ne</td><td>检测两个数是否不相等，不相等返回 true</td><td>[ <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-9-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-71" style="width: 3.158em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.622em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.789em, 1002.56em, 2.741em, -999.997em); top: -2.497em; left: 0em;"><span class="mrow" id="MathJax-Span-72"><span class="mi" id="MathJax-Span-73" style="font-family: STIXMathJax_Normal-italic;">𝑎</span><span class="mo" id="MathJax-Span-74" style="font-family: STIXMathJax_Main; padding-left: 0.241em;">−</span><span class="mi" id="MathJax-Span-75" style="font-family: STIXMathJax_Normal-italic; padding-left: 0.241em;">𝑛</span><span class="mi" id="MathJax-Span-76" style="font-family: STIXMathJax_Normal-italic;">𝑒</span></span><span style="display: inline-block; width: 0px; height: 2.503em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.139em; border-left: 0px solid; width: 0px; height: 0.861em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>−</mo><mi>n</mi><mi>e</mi></math></span></span><script type="math/tex" id="MathJax-Element-9">a -ne </script>b ] 返回 true</td></tr><tr><td>-gt</td><td>检测左边的数是否大于右边的，如果是，则返回 true</td><td>[ <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-10-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mi&gt;g&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-77" style="width: 3.039em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.503em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.729em, 1002.44em, 2.86em, -999.997em); top: -2.497em; left: 0em;"><span class="mrow" id="MathJax-Span-78"><span class="mi" id="MathJax-Span-79" style="font-family: STIXMathJax_Normal-italic;">𝑎</span><span class="mo" id="MathJax-Span-80" style="font-family: STIXMathJax_Main; padding-left: 0.241em;">−</span><span class="mi" id="MathJax-Span-81" style="font-family: STIXMathJax_Normal-italic; padding-left: 0.241em;">𝑔</span><span class="mi" id="MathJax-Span-82" style="font-family: STIXMathJax_Normal-italic;">𝑡</span></span><span style="display: inline-block; width: 0px; height: 2.503em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.282em; border-left: 0px solid; width: 0px; height: 1.075em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>−</mo><mi>g</mi><mi>t</mi></math></span></span><script type="math/tex" id="MathJax-Element-10">a -gt </script>b ] 返回 false</td></tr><tr><td>-lt</td><td>检测左边的数是否小于右边的，如果是，则返回 true</td><td>[ <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-11-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-83" style="width: 2.801em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.324em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.67em, 1002.26em, 2.741em, -999.997em); top: -2.497em; left: 0em;"><span class="mrow" id="MathJax-Span-84"><span class="mi" id="MathJax-Span-85" style="font-family: STIXMathJax_Normal-italic;">𝑎</span><span class="mo" id="MathJax-Span-86" style="font-family: STIXMathJax_Main; padding-left: 0.241em;">−</span><span class="mi" id="MathJax-Span-87" style="font-family: STIXMathJax_Normal-italic; padding-left: 0.241em;">𝑙</span><span class="mi" id="MathJax-Span-88" style="font-family: STIXMathJax_Normal-italic;">𝑡</span></span><span style="display: inline-block; width: 0px; height: 2.503em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.139em; border-left: 0px solid; width: 0px; height: 1.004em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>−</mo><mi>l</mi><mi>t</mi></math></span></span><script type="math/tex" id="MathJax-Element-11">a -lt </script>b ] 返回 true</td></tr><tr><td>-ge</td><td>检测左边的数是否大于等于右边的，如果是，则返回 true</td><td>[ <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-12-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mi&gt;g&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-89" style="width: 3.158em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.622em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.789em, 1002.56em, 2.86em, -999.997em); top: -2.497em; left: 0em;"><span class="mrow" id="MathJax-Span-90"><span class="mi" id="MathJax-Span-91" style="font-family: STIXMathJax_Normal-italic;">𝑎</span><span class="mo" id="MathJax-Span-92" style="font-family: STIXMathJax_Main; padding-left: 0.241em;">−</span><span class="mi" id="MathJax-Span-93" style="font-family: STIXMathJax_Normal-italic; padding-left: 0.241em;">𝑔</span><span class="mi" id="MathJax-Span-94" style="font-family: STIXMathJax_Normal-italic;">𝑒</span></span><span style="display: inline-block; width: 0px; height: 2.503em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.282em; border-left: 0px solid; width: 0px; height: 1.004em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>−</mo><mi>g</mi><mi>e</mi></math></span></span><script type="math/tex" id="MathJax-Element-12">a -ge </script>b ] 返回 false</td></tr><tr><td>-le</td><td>检测左边的数是否小于等于右边的，如果是，则返回 true</td><td>[ <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-13-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-95" style="width: 2.979em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.443em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.67em, 1002.38em, 2.741em, -999.997em); top: -2.497em; left: 0em;"><span class="mrow" id="MathJax-Span-96"><span class="mi" id="MathJax-Span-97" style="font-family: STIXMathJax_Normal-italic;">𝑎</span><span class="mo" id="MathJax-Span-98" style="font-family: STIXMathJax_Main; padding-left: 0.241em;">−</span><span class="mi" id="MathJax-Span-99" style="font-family: STIXMathJax_Normal-italic; padding-left: 0.241em;">𝑙</span><span class="mi" id="MathJax-Span-100" style="font-family: STIXMathJax_Normal-italic;">𝑒</span></span><span style="display: inline-block; width: 0px; height: 2.503em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.139em; border-left: 0px solid; width: 0px; height: 1.004em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>−</mo><mi>l</mi><mi>e</mi></math></span></span><script type="math/tex" id="MathJax-Element-13">a -le </script>b ] 返回 true</td></tr></tbody></table>
+
+**布尔运算符**
+假定变量 a 为 10，变量 b 为 20：
+
+<table><thead><tr><th>运算符</th><th>说明</th><th>举例</th></tr></thead><tbody><tr><td>!</td><td>非运算，表达式为 true 则返回 false，否则返回 true</td><td>[ ! false ] 返回 true</td></tr><tr><td>-o</td><td>或运算，有一个表达式为 true 则返回 true</td><td>[ <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-14-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mn&gt;20&lt;/mn&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mi&gt;o&lt;/mi&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-101" style="width: 5.955em; display: inline-block;"><span style="display: inline-block; position: relative; width: 4.943em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.67em, 1004.94em, 2.741em, -999.997em); top: -2.497em; left: 0em;"><span class="mrow" id="MathJax-Span-102"><span class="mi" id="MathJax-Span-103" style="font-family: STIXMathJax_Normal-italic;">𝑎</span><span class="mo" id="MathJax-Span-104" style="font-family: STIXMathJax_Main; padding-left: 0.241em;">−</span><span class="mi" id="MathJax-Span-105" style="font-family: STIXMathJax_Normal-italic; padding-left: 0.241em;">𝑙</span><span class="mi" id="MathJax-Span-106" style="font-family: STIXMathJax_Normal-italic;">𝑡</span><span class="mn" id="MathJax-Span-107" style="font-family: STIXMathJax_Main;">20</span><span class="mo" id="MathJax-Span-108" style="font-family: STIXMathJax_Main; padding-left: 0.241em;">−</span><span class="mi" id="MathJax-Span-109" style="font-family: STIXMathJax_Normal-italic; padding-left: 0.241em;">𝑜</span></span><span style="display: inline-block; width: 0px; height: 2.503em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.139em; border-left: 0px solid; width: 0px; height: 1.004em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>−</mo><mi>l</mi><mi>t</mi><mn>20</mn><mo>−</mo><mi>o</mi></math></span></span><script type="math/tex" id="MathJax-Element-14">a -lt 20 -o </script>b -gt 100 ] 返回 true</td></tr><tr><td>-a</td><td>与运算，两个表达式都为 true 才返回 true</td><td>[ <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-15-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mn&gt;20&lt;/mn&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-110" style="width: 6.015em; display: inline-block;"><span style="display: inline-block; position: relative; width: 5.003em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.67em, 1004.94em, 2.741em, -999.997em); top: -2.497em; left: 0em;"><span class="mrow" id="MathJax-Span-111"><span class="mi" id="MathJax-Span-112" style="font-family: STIXMathJax_Normal-italic;">𝑎</span><span class="mo" id="MathJax-Span-113" style="font-family: STIXMathJax_Main; padding-left: 0.241em;">−</span><span class="mi" id="MathJax-Span-114" style="font-family: STIXMathJax_Normal-italic; padding-left: 0.241em;">𝑙</span><span class="mi" id="MathJax-Span-115" style="font-family: STIXMathJax_Normal-italic;">𝑡</span><span class="mn" id="MathJax-Span-116" style="font-family: STIXMathJax_Main;">20</span><span class="mo" id="MathJax-Span-117" style="font-family: STIXMathJax_Main; padding-left: 0.241em;">−</span><span class="mi" id="MathJax-Span-118" style="font-family: STIXMathJax_Normal-italic; padding-left: 0.241em;">𝑎</span></span><span style="display: inline-block; width: 0px; height: 2.503em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.139em; border-left: 0px solid; width: 0px; height: 1.004em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>−</mo><mi>l</mi><mi>t</mi><mn>20</mn><mo>−</mo><mi>a</mi></math></span></span><script type="math/tex" id="MathJax-Element-15">a -lt 20 -a </script>b -gt 100 ] 返回 false</td></tr></tbody></table>
+
+**逻辑运算符**
+<table><thead><tr><th>运算符</th><th>说明</th><th>举例</th></tr></thead><tbody><tr><td>&amp;&amp;</td><td>逻辑的 AND</td><td>[[ <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-16-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;merror&gt;&lt;mtext&gt;a&amp;#xA0;-lt&amp;#xA0;100&amp;#xA0;&amp;amp;&amp;amp;&lt;/mtext&gt;&lt;/merror&gt;&lt;/math&gt;" role="presentation"><span class="math" id="MathJax-Span-119" style="" aria-hidden="true"><span class="noError" id="MathJax-Span-120" style="display: inline-block;">a&nbsp;-lt&nbsp;100&nbsp;&amp;&amp;</span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><merror><mtext>a&nbsp;-lt&nbsp;100&nbsp;&amp;&amp;</mtext></merror></math></span></span><script type="math/tex" id="MathJax-Element-16">a -lt 100 && </script>b -gt 100 ]] 返回 false</td></tr><tr><td>||</td><td>逻辑的 OR</td><td>[[ <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-17-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mn&gt;100&lt;/mn&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo stretchy=&quot;false&quot;&gt;|&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo stretchy=&quot;false&quot;&gt;|&lt;/mo&gt;&lt;/mrow&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-121" style="width: 5.36em; display: inline-block;"><span style="display: inline-block; position: relative; width: 4.467em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.61em, 1004.35em, 2.86em, -999.997em); top: -2.497em; left: 0em;"><span class="mrow" id="MathJax-Span-122"><span class="mi" id="MathJax-Span-123" style="font-family: STIXMathJax_Normal-italic;">𝑎</span><span class="mo" id="MathJax-Span-124" style="font-family: STIXMathJax_Main; padding-left: 0.241em;">−</span><span class="mi" id="MathJax-Span-125" style="font-family: STIXMathJax_Normal-italic; padding-left: 0.241em;">𝑙</span><span class="mi" id="MathJax-Span-126" style="font-family: STIXMathJax_Normal-italic;">𝑡</span><span class="mn" id="MathJax-Span-127" style="font-family: STIXMathJax_Main;">100</span><span class="texatom" id="MathJax-Span-128"><span class="mrow" id="MathJax-Span-129"><span class="mo" id="MathJax-Span-130" style="font-family: STIXMathJax_Variants;">|</span></span></span><span class="texatom" id="MathJax-Span-131"><span class="mrow" id="MathJax-Span-132"><span class="mo" id="MathJax-Span-133" style="font-family: STIXMathJax_Variants;">|</span></span></span></span><span style="display: inline-block; width: 0px; height: 2.503em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.282em; border-left: 0px solid; width: 0px; height: 1.218em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>−</mo><mi>l</mi><mi>t</mi><mn>100</mn><mrow class="MJX-TeXAtom-ORD"><mo stretchy="false">|</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo stretchy="false">|</mo></mrow></math></span></span><script type="math/tex" id="MathJax-Element-17">a -lt 100 || </script>b -gt 100 ]] 返回 true</td></tr></tbody></table>
+
+**字符串运算符**
+假定变量 a 为 “abc”，变量 b 为 “efg”：
+<table><thead><tr><th>运算符</th><th>说明</th><th>举例</th></tr></thead><tbody><tr><td>=</td><td>检测两个字符串是否相等，相等返回 true</td><td>[ <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-18-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-134" style="width: 1.789em; display: inline-block;"><span style="display: inline-block; position: relative; width: 1.491em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.908em, 1001.43em, 2.682em, -999.997em); top: -2.497em; left: 0em;"><span class="mrow" id="MathJax-Span-135"><span class="mi" id="MathJax-Span-136" style="font-family: STIXMathJax_Normal-italic;">𝑎</span><span class="mo" id="MathJax-Span-137" style="font-family: STIXMathJax_Main; padding-left: 0.301em;">=</span></span><span style="display: inline-block; width: 0px; height: 2.503em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.068em; border-left: 0px solid; width: 0px; height: 0.718em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>=</mo></math></span></span><script type="math/tex" id="MathJax-Element-18">a = </script>b ] 返回 false</td></tr><tr><td>!=</td><td>检测两个字符串是否不相等，不相等返回 true</td><td>[ <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-19-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo&gt;!&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-138" style="width: 2.265em; display: inline-block;"><span style="display: inline-block; position: relative; width: 1.848em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.67em, 1001.79em, 2.682em, -999.997em); top: -2.497em; left: 0em;"><span class="mrow" id="MathJax-Span-139"><span class="mi" id="MathJax-Span-140" style="font-family: STIXMathJax_Normal-italic;">𝑎</span><span class="mo" id="MathJax-Span-141" style="font-family: STIXMathJax_Main;">!</span><span class="mo" id="MathJax-Span-142" style="font-family: STIXMathJax_Main; padding-left: 0.301em;">=</span></span><span style="display: inline-block; width: 0px; height: 2.503em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.068em; border-left: 0px solid; width: 0px; height: 1.004em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>!</mo><mo>=</mo></math></span></span><script type="math/tex" id="MathJax-Element-19">a != </script>b ] 返回 true</td></tr><tr><td>-z</td><td>检测字符串长度是否为0，为0返回 true</td><td>[ -z $a ] 返回 false</td></tr><tr><td>-n</td><td>检测字符串长度是否不为 0，不为 0 返回 true</td><td>[ -n “$a” ] 返回 true</td></tr><tr><td>$</td><td>检测字符串是否不为空，不为空返回 true</td><td>[ $a ] 返回 true</td></tr></tbody></table>
+
+**文件测试运算符**
+
+<table><thead><tr><th>运算符</th><th>说明</th></tr></thead><tbody><tr><td>-b file</td><td>检测文件是否是块设备文件，如果是，则返回 true</td></tr><tr><td>-c file</td><td>检测文件是否是字符设备文件，如果是，则返回 true</td></tr><tr><td>-d file</td><td>检测文件是否是目录，如果是，则返回 true</td></tr><tr><td>-f file</td><td>检测文件是否是普通文件（既不是目录，也不是设备文件），如果是，则返回 true</td></tr><tr><td>-g file</td><td>检测文件是否设置了 SGID 位，如果是，则返回 true</td></tr><tr><td>-k file</td><td>检测文件是否设置了粘着位(Sticky Bit)，如果是，则返回 true</td></tr><tr><td>-p file</td><td>检测文件是否是有名管道，如果是，则返回 true</td></tr><tr><td>-u file</td><td>检测文件是否设置了 SUID 位，如果是，则返回 true</td></tr><tr><td>-r file</td><td>检测文件是否可读，如果是，则返回 true</td></tr><tr><td>-w file</td><td>检测文件是否可写，如果是，则返回 true</td></tr><tr><td>-x file</td><td>检测文件是否可执行，如果是，则返回 true</td></tr><tr><td>-s file</td><td>检测文件是否为空（文件大小是否大于0），不为空返回 true</td></tr><tr><td>-e file</td><td>检测文件（包括目录）是否存在，如果是，则返回 true</td></tr></tbody></table>
+
+其他检查符：
+-S: 判断某文件是否 socket
+-L: 检测文件是否存在并且是一个符号链接
+
+### echo命令
+
+用于字符串的输出。命令格式：`echo string`
+
+📃 显示普通字符串
+
+```bash
+echo "It is a test"
+# 这里的双引号完全可以省略，以下命令与上面实例效果一致
+echo It is a test
+```
+
+📃 显示转义字符
+```bash
+echo "\"It is a test\""   # 结果将是:"It is a test"  同样，双引号也可以省略
+```
+
+📃 显示变量
+ read 命令从标准输入中读取一行,并把输入行的每个字段的值指定给 shell 变量
+
+ ```bash
+#!/bin/sh
+read name
+echo "$name It is a test"
+# 以上代码保存为 test.sh，name 接收标准输入的变量，结果将是:
+$ sh test.sh
+OK
+OK It is a test
+ ```
+
+ 📃 显示换行
+ ```bash
+ echo -e "OK!\n"
+ echo "It is a test"
+
+ # 输出结果：
+ OK!
+
+ It is a test
+ ```
+
+ 📃 显示不换行
+ ```bash
+ #!/bin/sh
+ echo -e "OK! \c" # -e 开启转义 \c 不换行
+ echo "It is a test"
+
+ # 输出结果：OK! It is a test
+ ```
+
+📃 显示结果定向至文件
+```bash
+echo "It is a test" > myfile
+```
+
+📃 原样输出字符串，不进行转义或取变量(用单引号)
+```bash
+echo '$name\"'
+# 输出结果： $name\"
+```
+
+📃 显示命令执行结果
+```bash
+echo `date`   # 结果将显示当前日期
+```
+
+**echo输出的字符串**
+
+<table><thead><tr><th>能否引用变量</th><th>能否引用转移符</th><th>能否引用文本格式符(如：换行符、制表符)</th></tr></thead><tbody><tr><td>单引号</td><td>否</td><td>否</td></tr><tr><td>双引号</td><td>能</td><td>能</td></tr><tr><td>无引号</td><td>能</td><td>能</td></tr></tbody></table>
+
+### read 命令
+read 命令一个一个词组地接收输入的参数，每个词组需要使用空格进行分隔；如果输入的词组个数大于需要的参数个数，则多出的词组将被作为整体为最后一个参数接收。
+
+测试文件 test.sh 代码如下：
+
+```bash
+read firstStr secondStr
+echo "第一个参数:$firstStr;第二个参数:$secondStr"
+
+# 执行测试：
+$ sh test.sh
+一 二 三 四
+第一个参数:一;第二个参数:二 三 四
+```
+
+```bash
+read -p "请输入一段文字:" -n 6 -t 5 -s password
+echo -e "\npassword is $password"
+```
+
+**参数说明：**
+-p 输入提示文字
+-n 输入字符长度限制(达到6位，自动结束)
+-t 输入限时
+-s 隐藏输入内容
+
+```bash
+$ sh test.sh
+请输入一段文字:
+password is abcdef
+```
+
+### printf 命令
+
+printf 命令模仿 C 程序库（library）里的 printf() 程序。
+
+printf 由 POSIX 标准所定义，因此使用 printf 的脚本比使用 echo 移植性好。
+
+printf 使用引用文本或空格分隔的参数，外面可以在 printf 中使用格式化字符串，还可以制定字符串的宽度、左右对齐方式等。默认的 printf 不会像 echo 自动添加换行符，可以手动添加 \n。
+
+**printf 命令的语法：** `printf format-string [arguments]
+
+**参数说明：**
+- format-string: 为格式控制字符串
+- arguments: 为参数列表。
+
+```bash
+$ echo "Hello, Shell"
+Hello, Shell
+
+$ printf "Hello, Shell\n"
+Hello, Shell
+
+$ printf "%-10s %-8s %-4s\n"
+$ printf "%-10s %-8s %-4.2f\n"
+$ printf "%-10s %-8s %-4.2f\n"
+$ printf "%-10s %-8s %-4.2f\n"
+```
+
+`%s %c %d %f ` 都是格式替代符，`％s `输出一个字符串，`％d `整型输出，`％c `输出一个字符，`％f `输出实数，以小数形式输出。
+
+`%-10s `指一个宽度为 10 个字符（- 表示左对齐，没有则表示右对齐），任何字符都会被显示在 10 个字符宽的字符内，如果不足则自动以空格填充，超过也会将内容全部显示出来。
+
+`%-4.2f `指格式化为小数，其中 .2 指保留2位小数。
+
+**printf 的转义**
+
+<table><thead><tr><th>序列</th><th>说明</th></tr></thead><tbody><tr><td>\a</td><td>警告字符，通常为ASCII的BEL字符</td></tr><tr><td>\b</td><td>后退</td></tr><tr><td>\c</td><td>抑制（不显示）输出结果中任何结尾的换行字符（只在%b格式指示符控制下的参数字符串中有效），而且，任何留在参数里的字符、任何接下来的参数以及任何留在格式字符串中的字符，都被忽略</td></tr><tr><td>\f</td><td>换页（formfeed）</td></tr><tr><td>\n</td><td>换行</td></tr><tr><td>\r</td><td>回车（Carriage return）</td></tr><tr><td>\t</td><td>水平制表符</td></tr><tr><td>\v</td><td>垂直制表符</td></tr><tr><td>\</td><td>一个字面上的反斜杠字符</td></tr><tr><td>\ddd</td><td>表示1到3位数八进制值的字符。仅在格式字符串中有效</td></tr><tr><td>\0ddd</td><td>表示1到3位的八进制值字符</td></tr></tbody></table>
+
+### test 命令
+
+Shell中的 test 命令用于检查某个条件是否成立，它可以进行数值、字符和文件三个方面的测试。
+
+**数值**
+<table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td>-eq</td><td>等于则为真</td></tr><tr><td>-ne</td><td>不等于则为真</td></tr><tr><td>-gt</td><td>大于则为真</td></tr><tr><td>-ge</td><td>大于等于则为真</td></tr><tr><td>-lt</td><td>小于则为真</td></tr><tr><td>-le</td><td>小于等于则为真</td></tr></tbody></table>
+
+**字符串**
+<table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td>=</td><td>等于则为真</td></tr><tr><td>!=</td><td>不相等则为真</td></tr><tr><td>-z 字符串</td><td>字符串的长度为零则为真</td></tr><tr><td>-n字符串</td><td>字符串的长度不为零则为真</td></tr></tbody></table>
+
+**文件**
+<table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td>-e 文件名</td><td>如果文件存在则为真</td></tr><tr><td>-r 文件名</td><td>如果文件存在且可读则为真</td></tr><tr><td>-w 文件名</td><td>如果文件存在且可写则为真</td></tr><tr><td>-x 文件名</td><td>如果文件存在且可执行则为真</td></tr><tr><td>-s 文件名</td><td>如果文件存在且至少有一个字符则为真</td></tr><tr><td>-d 文件名</td><td>如果文件存在且为目录则为真</td></tr><tr><td>-f 文件名</td><td>如果文件存在且为普通文件则为真</td></tr><tr><td>-c 文件名</td><td>如果文件存在且为字符型特殊文件则为真</td></tr><tr><td>-b 文件名</td><td>如果文件存在且为块特殊文件则为真</td></tr></tbody></table>
+
+### IF判断
+
+**if 语法格式：**
+```bash
+if condition:
+then
+  command1
+  command2
+  ...
+  commandN
+fi
+```
+
+写成一行（适用于终端命令提示符）：
+
+```bash
+if [ $(ps -ef | grep -c "ssh") -gt 1 ]; then echo "true"; fi
+```
+
+**if else 语法格式**
+```bash
+if condition
+then
+  command1
+  command2
+  ...
+else
+  command
+fi
+```
+
+**if else-if else 语法格式**
+```bash
+if condition
+then
+  command1
+  command2
+  ...
+elif condition2
+then
+  commandN
+else
+  command
+fi
+```
+
+📍 if else 的 […] 判断语句中大于使用 -gt，小于使用 -lt。
+📍 如果使用 ((…)) 作为判断语句，大于和小于可以直接使用 > 和 <。
+
+📃 参考实例
+```bash
+a=10
+b=20
+if [ $a == $b ]
+then
+  echo "a equal to b"
+elif [ $a -gt $b ]
+then
+  echo "a greater than b"
+elif [ $a -lt $b ]
+then
+  echo "a less than b"
+else
+  echo "No condition meet"
+fi
+
+# or
+a=10
+b=20
+if (( $a == $b ))
+then
+  echo "a equal to b"
+elif (( $a > $b ))
+then
+  echo "a greater than b"
+elif (( $a <-lt> $b ))
+then
+  echo "a less than b"
+else
+  echo "No condition meet"
+fi
+```
+
+```bash
+# 与 test 命令结合使用
+num1=$[2*3]
+num2=$[1+5]
+if test $[num1] -eq $[num2]
+then
+  echo "Equally"
+else
+  echo "Not Equal"
+fi
+```
+
+### for 循环
+**for循环格式**
+```bash
+for var in item1 item2 ... itemN
+do
+  command1
+  command2
+  ...
+done
+```
+
+📃 参考实例
+```bash
+for loop in 1 2 3 4 5
+do
+  echo "The value is: $loop"
+done
+
+# 输出结果
+The value is: 1
+The value is: 2
+The value is: 3
+The value is: 4
+The value is: 5
+
+for str in This is a string
+do
+  echo $str
+done
+
+# 输出结果
+This
+is
+a
+string
+```
+
+### until 循环
+
+until 循环执行一系列命令直至条件为 true 时停止。
+
+until 循环与 while 循环在处理方式上刚好相反。
+
+一般 while 循环优于 until 循环，但在某些时候—也只是极少数情况下，until 循环更加有用。
+
+**until 语法格式**
+```bash
+until condition
+do
+  command
+done
+```
+
+📃 参考实例
+```bash
+a=0
+
+until [ ! $a -lt 10 ]
+do
+  echo $a
+  a=`expr $a + 1`
+done
+
+# 输出结果为：
+0
+1
+2
+3
+...
+9
+```
+
+### case 语句
+
+case … esac 为多选择语句，与其他语言中的 switch … case 语句类似，是一种多分支选择结构，每个 case 分支用右圆括号开始，用两个分号 ;; 表示 break，即执行结束，跳出整个 case … esac 语句，esac（就是 case 反过来）作为结束标记。
+
+**语法格式**
+
+```bash
+case value in
+value1)
+  command1
+  command2
+  ...
+  ;;
+value2)
+  command1
+  command2
+  ...
+  ;;
+esac
+```
+
+case 取值后面必须为单词 in，每一模式必须以右括号结束。取值可以为变量或常数，匹配发现取值符合某一模式后，其间所有命令开始执行直至 ;; 。
+
+取值将检测匹配的每一个模式。一旦模式匹配，则执行完匹配模式相应命令后不再继续其他模式。如果无一匹配模式，使用星号 * 捕获该值，再执行后面的命令。
+
+📃 参考实例
+```bash
+echo '输入 1 到 3 之间的数字:'
+echo '你输入的数字为:'
+read aNum
+case $aNum in
+  1) echo 'you choose 1'
+  ;;
+  2) echo 'you choose 2'
+  ;;
+  3) echo 'you choose 3'
+  ;;
+  *) echo 'none is choose'
+  ;;
+esac
+```
+
+### break 和 continue
+
+break 命令允许跳出所有循环（终止执行后面的所有循环）。
+
+continue 命令与 break 命令类似，它不会跳出所有循环，仅仅跳出当前循环。
+
+📃 参考实例
+```bash
+#!/bin/bash
+while：
+do
+  echo -n "input 1 to 3":
+  read aNum
+  case $aNum in
+    1|2|3) echo "you input $aNum!"
+    ;;
+    *) echo "input out of range"
+      break
+      #or
+      continue
+    ;;
+  esac
+done
+```
+
+### 函数
+
+#### basename
+
+**基本语法：** `basename [string / pathname] [suffix] `
+
+basename 命令会删掉所有的前缀包括最后一个（‘/’）字符，然后将字符串显示出来。
+
+basename 可以理解为取路径里的文件名称.
+
+suffix 为后缀，如果 suffix 被指定了，basename 会将 pathname 或 string 中的 suffix 去掉。
+
+📃 参考实例
+```bash
+# 截取该/home/user1/banzhang.txt 路径的文件名称
+$ basename /home/user1/banzhang.txt
+bangzhang.txt
+$ basename /home/user1/banzhang.txt .txt
+bangzhang
+```
+
+#### dirname
+dirname 文件绝对路径
+
+从给定的包含绝对路径的文件名中去除文件名，然后返回剩下的路径。
+
+dirname 可以理解为取文件路径的绝对路径名称。
+
+
+```bash
+$ dirname /home/user1/banzhang.txt
+/home/user1
+```
+
+#### 自定义函数
+
+**定义格式**
+
+```bash
+[ function ] funname [()]
+
+{
+
+  action;
+
+  [return int;]
+}
+```
+
+可以带function fun() 定义，也可以直接fun() 定义,不带任何参数。
+
+参数返回，可以显示加：return 返回，如果不加，将以最后一条命令运行结果，作为返回值。 return后跟数值n(0-255）。
+
+```bash
+demoFun(){
+  echo "My first custom function"
+}
+
+echo "----Function execute---"
+demoFun
+echo "----Function end------"
+
+# result
+----Function execute---
+My first custom function
+----Function end------
+```
+
+在Shell中，调用函数时可以向其传递参数。在函数体内部，通过 n 的形式来获取参数的值，例如，1表示第一个参数，$2表示第二个参数…
+
+📃 参考实例
+```bash
+funWithParam(){
+  echo "1st param $1"
+  echo "2 param $2"
+  echo "10 param $10"
+  echo "10 param ${10}"
+}
+
+funWithParam 1 2 3 4 5 6 7 8 9 60
+# result
+1st param 1
+2 param 2
+10 param 10
+10 param 60
+
+# $10 不能获取第十个参数，获取第十个参数需要${10}。当n>=10时，需要使用${n}来获取参数。
+```
+
+<table><thead><tr><th>参数处理</th><th>说明</th></tr></thead><tbody><tr><td>$#</td><td>传递到脚本或函数的参数个数</td></tr><tr><td>$*</td><td>以一个单字符串显示所有向脚本传递的参数</td></tr><tr><td>$$</td><td>脚本运行的当前进程ID号</td></tr><tr><td>$!</td><td>后台运行的最后一个进程的ID号</td></tr><tr><td>$@</td><td>与$*相同，但是使用时加引号，并在引号中返回每个参数。</td></tr><tr><td>$-</td><td>显示Shell使用的当前选项，与set命令功能相同。</td></tr><tr><td>$?</td><td>显示最后命令的退出状态。0表示没有错误，其他任何值表明有错误。</td></tr></tbody></table>
+
+### 输入/输出重定向
+
+<table><thead><tr><th>命令</th><th>说明</th></tr></thead><tbody><tr><td>command &gt; file</td><td>将输出重定向到 file。</td></tr><tr><td>command &lt; file</td><td>将输入重定向到 file。</td></tr><tr><td>command &gt;&gt; file</td><td>将输出以追加的方式重定向到 file。</td></tr><tr><td>n &gt; file</td><td>将文件描述符为 n 的文件重定向到 file。</td></tr><tr><td>n &gt;&gt; file</td><td>将文件描述符为 n 的文件以追加的方式重定向到 file。</td></tr><tr><td>n &gt;&amp; m</td><td>将输出文件 m 和 n 合并。</td></tr><tr><td>n &lt;&amp; m</td><td>将输入文件 m 和 n 合并。</td></tr><tr><td>&lt;&lt; tag</td><td>将开始标记 tag 和结束标记 tag 之间的内容作为输入。</td></tr></tbody></table>
+
+> 文件描述符 0 通常是标准输入（STDIN），1 是标准输出（STDOUT），2 是标准错误输出（STDERR）。
+
+**输出重定向**
+
+**语法：** `command1 > file1`
+
+上面这个命令执行command1然后将输出的内容存入file1。
+
+任何file1内的已经存在的内容将被新内容替代。如果要将新内容添加在文件末尾，请使用>>操作符。
+
+📃 参考实例
+
+```bash
+$ echo "AAA" > users
+$ cat users
+AAA
+
+# 如果不希望文件内容被覆盖，可以使用 >> 追加到文件末尾，例如：
+$ echo "AAA" >> users
+$ cat users
+AAA
+AAA
+```
+
+**输入重定向**
+
+**语法：** `command1 < file1`
+
+📃 参考实例
+```bash
+# 接着以上实例，我们需要统计 users 文件的行数,执行以下命令：
+$ wc -l users
+2 users
+
+$ wc -l < users
+2
+
+# 上面两个例子的结果不同：第一个例子，会输出文件名；第二个不会，因为它仅仅知道从标准输入读取内容。
+
+# 同时替换输入和输出，执行command1，从文件infile读取内容，然后将输出写入到outfile中。
+command1 < infile > outfile
+```
+
+**一般情况下，每个 Unix/Linux 命令运行时都会打开三个文件：**
+👉 标准输入文件(stdin)：stdin的文件描述符为0，Unix程序默认从stdin读取数据。
+👉 标准输出文件(stdout)：stdout 的文件描述符为1，Unix程序默认向stdout输出数据。
+👉 标准错误文件(stderr)：stderr的文件描述符为2，Unix程序会向stderr流中写入错误信息。
+
+默认情况下，command > file 将 stdout 重定向到 file，command < file 将stdin 重定向到 file。
+
+如果希望 stderr 重定向到 file，可以这样写：
+
+```bash
+$ command 2 > file
+
+# 如果希望 stderr 追加到 file 文件末尾，可以这样写：
+$ command 2 >> file
+
+# 表示标准错误文件(stderr)。如果希望将 stdout 和 stderr 合并后重定向到 file，可以这样写：
+$ command > file 2>&1
+#or
+$ command >> file 2>&1
+
+# 如果希望对 stdin 和 stdout 都重定向，可以这样写：
+$ command < file1 > file2
+```
+
+command 命令将 stdin 重定向到 file1，将 stdout 重定向到 file2。
+
+**Here Document**
+
+Here Document 是 Shell 中的一种特殊的重定向方式，用来将输入重定向到一个交互式 Shell 脚本或程序。
+
+它的基本的格式如下：
+```bash
+command << delimiter
+    document
+  delimeter
+```
+
+它的作用是将两个 delimiter 之间的内容(document) 作为输入传递给 command。
+
+**/dev/null 文件**
+如果希望执行某个命令，但又不希望在屏幕上显示输出结果，那么可以将输出重定向到 /dev/null
+```bash
+$ command > /dev/null
+```
+
+`/dev/null` 是一个特殊的文件，写入到它的内容都会被丢弃；如果尝试从该文件读取内容，那么什么也读不到。但是 /dev/null 文件非常有用，将命令的输出重定向到它，会起到"禁止输出"的效果。
+
+如果希望屏蔽 stdout 和 stderr，可以这样写：
+
+```bash
+$ command > /dev/null 2>&1
+```
+
+> 注意：0 是标准输入（STDIN），1 是标准输出（STDOUT），2 是标准错误输出（STDERR）。
+>  这里的 2 和 > 之间不可以有空格，2> 是一体的时候才表示错误输出。
+
+### 简单正则使用
+
+正则表达式使用单个字符串来描述、匹配一系列符合某个语法规则的字符串。在很多文本编辑器里，正则表达式通常被用来检索、替换那些符合某个模式的文本。在 Linux 中，grep，sed，awk 等文本处理工具都支持通过正则表达式进行模式匹配。
+
+**常用的特殊字符**
+
+`^` 匹配一行的开头
+```bash
+$ cat /etc/passwd | grep ^a
+# 会匹配出所有以 a 开头的行
+```
+
+`$`匹配一行的结束
+```bash
+$ cat /etc/passwd | grep t$
+# 会匹配出所有以 t 结尾的行
+```
+
+`.`匹配一个任意的字符
+```bash
+$ cat /etc/passwd | grep r..t
+# 会匹配包含 rabt,rbbt,rxdt,root 等的所有行
+```
+
+`*` 不单独使用，他和上一个字符连用，表示匹配上一个字符 0 次或多次
+```bash
+$ cat /etc/passwd | grep ro*t
+# 会匹配 rt, rot, root, rooot, roooot 等所有行
+```
+
+**字符区间（中括号）：** `[]`
+<ul><li>[ ] 表示匹配某个范围内的一个字符</li><li>[6,8] ------ 匹配 6 或者 8</li><li>[0-9] ------ 匹配一个 0-9 的数字</li><li>[0-9]* ------ 匹配任意长度的数字字符串</li><li>[a-z] ------匹配一个 a-z 之间的字符</li><li>[a-z]* ------ 匹配任意长度的字母字符串</li><li>[a-c, e-f] ----- 匹配 a-c 或者 e-f 之间的任意字符</li></ul>
+
+`\`表示转义，并不会单独使用。由于所有特殊字符都有其特定匹配模式，当我们想匹配某一特殊字符本身时（例如，我想找出所有包含 ‘$’ 的行），就会碰到困难。此时我们就要将转义字符和特殊字符连用，来表示特殊字符本身。
+
+```bash
+$ cat /etc/passwd | grep 'a\$b'
+# 就会匹配所有包含 a$b 的行。注意需要使用单引号将表达式引起来
+```
+
+### 文本处理
+
+#### cut 命令
+cut 的工作就是“剪”，具体的说就是在文件中负责剪切数据用的。cut 命令从文件的每一行剪切字节、字符和字段并将这些字节、字符和字段输出。
+
+如果不指定 File 参数，cut 命令将读取标准输入。必须指定 -b、-c 或 -f 标志之一。
+
+<table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td>-b</td><td>以字节为单位进行分割。这些字节位置将忽略多字节字符边界，除非也指定了 -n 标志。</td></tr><tr><td>-c</td><td>以字符为单位进行分割。</td></tr><tr><td>-d</td><td>自定义分隔符，默认为制表符。</td></tr><tr><td>-f</td><td>-d一起使用，指定显示哪个区域。</td></tr><tr><td>-n</td><td>取消分割多字节字符。仅和 -b 标志一起使用。如果字符的最后一个字节落在由 -b 标志的 List 参数指示的范围之内，该字符将被写出；否则，该字符将被排除</td></tr></tbody></table>
+
+📃 参考实例
+```bash
+# 当执行who命令时，会输出类似如下的内容：
+$ who
+rocrocket :0  2009-xx-xx xx:xx
+rocrocket pts/0 20xx-xx-xx xx:xx
+rocrocket pts/1 20xx-xx-xx xx:xx
+
+# 如果我们想提取每一行的第3个字节，如下：
+$ who|cut -b 3
+c
+c
+```
+
+#### 文件包含
+
+Shell 也可以包含外部脚本。这样可以很方便的封装一些公用的代码作为一个独立的文件。
+
+语法格式：
+
+```bash
+. filename # 注意点号(.)和文件名中间有一空格
+```
+Or
+```bash
+source filename
+```
+
+📃 参考实例
+创建两个 shell 脚本文件。
+1️⃣ test1.sh
+```bash
+#!/bin/bash
+url="http://www.baidu.com"
+```
+2️⃣ test2.sh
+```bash
+#!/bin/bash
+. ./test1.sh #使用 . 号来引用test1.sh 文件，或者 source ./test1.sh
+echo "baidu address: $url"
+```
+
+3️⃣ 为 test2.sh 添加可执行权限并执行
+```bash
+$ chmod +x test2.sh
+$ ./test2.sh
+```
+
+**运行结果：**百度地址：http://www.runoob.com
+
+> 被包含的文件 test1.sh 不需要可执行权限。
+
+#### sed 命令
+
+sed 命令是利用脚本来处理文本文件。
+
+sed 可依照脚本的指令来处理、编辑文本文件。
+
+Sed 主要用来自动编辑一个或多个文件、简化对文件的反复操作、编写转换程序等。
+
+**语法：** `sed [-hnV][-e<script>][-f<script文件>][文本文件]`
+
+<table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td>-e&lt;script&gt;</td><td>以选项中指定的script来处理输入的文本文件</td></tr><tr><td>-f&lt;script文件&gt;</td><td>以选项中指定的script文件来处理输入的文本文件</td></tr><tr><td>-h</td><td>显示帮助</td></tr><tr><td>-n</td><td>仅显示script处理后的结果</td></tr><tr><td>-V</td><td>显示版本信息</td></tr></tbody></table>
+
+<table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td>-e&lt;script&gt;</td><td>以选项中指定的script来处理输入的文本文件</td></tr><tr><td>-f&lt;script文件&gt;</td><td>以选项中指定的script文件来处理输入的文本文件</td></tr><tr><td>-h</td><td>显示帮助</td></tr><tr><td>-n</td><td>仅显示script处理后的结果</td></tr><tr><td>-V</td><td>显示版本信息</td></tr></tbody><table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td>-e&lt;script&gt;</td><td>以选项中指定的script来处理输入的文本文件</td></tr><tr><td>-f&lt;script文件&gt;</td><td>以选项中指定的script文件来处理输入的文本文件</td></tr><tr><td>-h</td><td>显示帮助</td></tr><tr><td>-n</td><td>仅显示script处理后的结果</td></tr><tr><td>-V</td><td>显示版本信息</td></tr></tbody></table></table>
+
+<table><thead><tr><th>动作</th><th>说明</th></tr></thead><tbody><tr><td>a</td><td>新增， a 的后面可以接字串，而这些字串会在新的一行出现(目前的下一行)</td></tr><tr><td>c</td><td>取代， c 的后面可以接字串，这些字串可以取代 n1,n2 之间的行！</td></tr><tr><td>d</td><td>删除，因为是删除，所以 d 后面通常不接任何东西；</td></tr><tr><td>i</td><td>插入， i 的后面可以接字串，而这些字串会在新的一行出现(目前的上一行)</td></tr><tr><td>p</td><td>打印，亦即将某个选择的数据印出。通常 p 会与参数 sed -n 一起运行</td></tr><tr><td>s</td><td>取代，可以直接进行取代的工作！通常这个 s 的动作可以搭配正则表达式</td></tr></tbody></table>
+
+
+#### awk命令
+AWK 是一种处理文本文件的语言，是一个强大的文本分析工具，把文件逐行的读入，以空格为默认分隔符将每行切片，切开的部分再进行分析处理。
+
+AWK 是取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian Kernighan 的 Family Name 的首字符。
+
+**语法：** `awk [选项参数] ‘/pattern1/{action1} /pattern2/{action2}...’ filename`
+
+> pattern：表示 awk 在数据中查找的内容，就是匹配模式
+>  action：在找到匹配内容时所执行的一系列命令
+
+<table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td>-F</td><td>指定输入文件分隔符</td></tr><tr><td>-v</td><td>赋值一个用户定义变量</td></tr></tbody></table>
+
+**基本使用**
+
+0️⃣ log.txt文本内容
+```
+2 this is a test
+3 do you like awk
+this is a test
+10 thre are orange, apple, mongo
+```
+
+1️⃣ 用法一：`awk '{[pattern] action}' {filenames}` 行匹配语句 awk ‘’ 只能用单引号
+每行按空格或TAB分割，输出文本中的1、4项
+
+```bash
+$ awk '{print $1,$4}' log.txt
+2 a
+3 like
+this test
+10 orange,apple,mongo
+```
+
