@@ -314,7 +314,14 @@ public class ItemCreatedFaultConsumer : IConsumer<Fault<ItemCreated>>
 
 Package use: Yarp.ReverseProxy
 
-Benefit:
+```csharp
+builder.Services.AddReverseProxy()
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+
+app.MapReverseProxy();
+```
+
+**Benefit:**
 - Very typical in Micro Services
 - Single surface area for requests
 - Client unaware of any internal services
@@ -323,6 +330,113 @@ Benefit:
 - URL Rewriting
 - Load Balancing
 - Caching
+
+Yarp.ReverseProxy的配置需要包含两个定义：Cluster 和 Routes
+
+**Cluster**类似于k8s的cluster-ip，为每个host定义一个名称，这个名称会在**routes**配置的时候用上。
+
+示例：
+```yml
+"ReverseProxy": {
+    "Clusters": {
+      "auctions": {
+        "Destinations": {
+          "auctionApi": {
+            "Address": "http://localhost:7001"
+          }
+        }
+      }
+    },
+    "Routes": {
+      "auctionsRead" : {
+        "ClusterId": "auctions",
+        "CorsPolicy": "customPolicy",
+        "Match": {
+          "Path": "/auctions/{**catch-all}",
+          "Methods": [ "GET" ]
+        },
+        "Transforms": [
+          {
+            "PathPattern": "api/auctions/{**catch-all}"
+          }
+        ]
+      },
+      "auctionsWrite" : {
+        "ClusterId": "auctions",
+        "CorsPolicy": "customPolicy",
+        "AuthorizationPolicy": "default",
+        "Match": {
+          "Path": "/auctions/{**catch-all}",
+          "Methods": [ "POST", "PUT", "DELETE" ]
+        },
+        "Transforms": [
+          {
+            "PathPattern": "api/auctions/{**catch-all}"
+          }
+        ]
+      },
+    }
+}
+```
+
+可以在Route上采用必要的规则，例如最常见的有`CorsPolicy`和`AuthorizationPolicy`.
+
+```csharp
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = builder.Configuration["IdentityServiceUrl"];
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters.ValidateAudience = false;
+        options.TokenValidationParameters.NameClaimType = "username";
+    });
+
+builder.Services.AddCors(options => {
+    options.AddPolicy("customPolicy", b => {
+        b.AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .WithOrigins(builder.Configuration["ClientApp"]!);
+    });
+});
+
+```
+
+假设gateway的host是http://localhost:6001。
+
+呼叫对应接口:
+```
+http://localhost:6001/auctions/getAuctions -> 反向代理 -> http://localhost:7001/api/auctions/getAuctions
+```
+
+以下是不用Transforms的示例
+```yml
+"ReverseProxy": {
+    "Clusters": {
+      "notifications": {
+        "Destinations": {
+          "notificationsHub": {
+            "Address": "http://localhost:7004"
+          }
+        }
+      }
+    },
+    "Routes": {
+      "notifications": {
+        "ClusterId": "notifications",
+        "CorsPolicy": "customPolicy",
+        "Match": {
+          "Path": "/notifications/{**catch-all}"
+        }
+      }
+    }
+}
+```
+
+呼叫对应接口:
+```
+http://localhost:6001/notifications -> http://localhost:7004/notifications
+```
 
 ## Section 7: Docker
 
