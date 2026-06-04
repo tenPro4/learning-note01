@@ -466,13 +466,131 @@ Producer → Exchange
 
 ## Azure
 
-**Azure Container Registry**
+### Azure Container Registry(ACR)
 The place similar to docker hub. The only different is security management. You can set the identity permission for your image to indicate who can access it.
 
-**App Service**
+**Why use it**
+- Security and Access Control
+- Performance (Much faster to download the image compare to docker hub when work with other azure service)
+- Integration with other Azure Resouces
+
+You can create acr through portal ui as well as through azure cli.
+Be note you have to install azure cli in your device first.
+
+```bash
+# test whether azure cli is install successfully
+az --version
+
+# Login first before try anything, it will popout a modal for you to enter you identity
+az login
+
+# Create first acr
+az acr create --resource-group demo-resource-group --name mycontainerregistry --sku Basic
+
+# Check acr
+az acr list --output table
+
+# You need to login particular registry for push action
+az acr login --name mycontainerregistry
+```
+
+The way push you image to acr is same what you did to docker hub.
+```
+build image -> tag -> push
+```
+
+### App Service
+PAAS platform that you can easily deploy you compile code without need to manage the underlying infrastruture.
+
+**Portal UI**
 Create Resource Group -> Create App Service Plans -> Create App Service
 
-**Azure Container App**
+**CLI**
+```bash
+az appservice plan create
+--name demo-service-plan
+--resource-group demo-resource-group
+--sku B1 --is-linux
+
+# List all appservice under particular resource group
+az appservice plan list --resource-group demo-resource-group
+
+az webapp create
+--resource-group demo-resource-group
+--plan demo-service-plan
+--name mywebapiapp
+--runtime "DOTNETCORE:8.0"
+
+az webapp list-runtimes --os-type linux
+
+az webapp list --resource-group demo-resource-group
+```
+
+Let deploy the image that host in ACR in previous section to webapp service
+
+```bash
+# Make sure you are login acr
+az acr login --name mycontainerregistry --resource-group demo-resource-group
+
+az webapp config container set
+--name mywebapiapp
+--resource-group demo-resource-group
+--container-image-name
+yourcontainerregistry.azurecr.io/demowebapp:latest
+
+az webapp log download
+--name mywebapiapp
+--resource-group demo-resource-group
+--log-file logs.zip
+
+# Update environment value; 
+az webapp config appsettings set
+--name mywebapiapp
+--resource-group demo-resource-group
+--settings
+ASPNETCORE_ENVIRONMENT=Development
+
+# You need to restart container (webapp) after config value is updated
+az webapp restart
+--name mywebapiapp
+--resource-group demo-resource-group
+```
+
+The webapp may fail to browser because webapp service dont have sufficient permission to pull the image from acr.
+
+To fix this, you have to go portal ui:
+WebApp -> Deployment -> Deployment center
+
+In the settings tab, change Registry settings Authentication option from `Admin Credentials` to `Managed Identity`.
+
+Except this, you can trigger `Continuous Deployment` option in same tab (auto pull if image is push)
+
+### Azure Container App
+
+```bash
+az provider register -n Microsoft.OperationalInsights --wait
+
+# Purpose of env: some container only communicate via internal network
+# For example, we have 10 microservices, but there are 3 services only need communicate internally;To archieve this, create env group settings to differentiate which include common ingress settings, virtual network or monitor settings.
+az containerapp env create
+--name demo-container-app1-env
+--resource-group demo-resource-group
+--location "East US"
+
+az containerapp create
+--name demo-container-app
+--resource-group demo-resource-group
+--environment demo-container-app1-env
+--image yourresgitry.azurecr.io/demowebapp:latest
+--registry-server yourresgitry.azurecr.io
+--cpu 0.5
+--memory 1.0Gi
+--min-replicas 1
+--max-replicas 1
+--ingress 'external'
+--target-port 8080
+--registry-identity system
+```
 
 ## Azure Devops
 
